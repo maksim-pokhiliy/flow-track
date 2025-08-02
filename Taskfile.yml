@@ -1,0 +1,102 @@
+version: "3"
+
+tasks:
+  # Development tasks
+  dev:
+    desc: Start development server
+    cmd: pnpm dev
+
+  build:
+    desc: Build production bundle
+    cmd: pnpm build
+
+  start:
+    desc: Start production server
+    cmd: pnpm start
+
+  # Code quality tasks
+  lint:
+    desc: Run ESLint with fix
+    cmd: pnpm lint:fix
+
+  lint:check:
+    desc: Run ESLint
+    cmd: pnpm lint
+
+  format:
+    desc: Format code with Prettier
+    cmd: pnpm format
+
+  format:check:
+    desc: Check code formatting
+    cmd: pnpm format:check
+
+  typecheck:
+    desc: Run TypeScript type checking (quick)
+    cmd: npx tsc --noEmit --skipLibCheck
+
+  # Testing tasks
+  test:
+    desc: Run tests
+    cmd: pnpm test
+
+  test:watch:
+    desc: Run tests in watch mode
+    cmd: pnpm test -- --watch
+
+  # Quality checks
+  check:
+    desc: Run quick quality checks
+    deps: [lint, type-check, format:check]
+
+  check:build:
+    desc: Run checks and build (for deployment)
+    cmds:
+      - task: check
+      - task: build
+
+  # Git hooks
+  install-hooks:
+    desc: Install git hooks
+    cmd: npx lefthook install
+
+  # Maintenance tasks
+  clean:
+    desc: Clean build artifacts and dependencies
+    cmds:
+      - rm -rf .next
+      - rm -rf out
+      - rm -rf dist
+      - rm -rf node_modules
+      - pnpm store prune
+    silent: true
+
+  deps:
+    desc: Install dependencies
+    cmd: pnpm install
+
+  deps:update:
+    desc: Update dependencies
+    cmd: pnpm update
+
+  # Deployment prep
+  deploy:check:
+    desc: Pre-deployment checks
+    deps: [check:build]
+
+  # Development workflow
+  fresh:
+    desc: Fresh start - clean and reinstall
+    cmds:
+      - task: clean
+      - task: deps
+      - task: install-hooks
+
+  # Info tasks
+  info:
+    desc: Show project info
+    cmd: |
+      echo "Project: codecraftr-website"
+      echo "Node: $(node --version)"
+      echo "pnpm: $(pnpm --version)"
+      echo "Next.js: $(npx next --version)"
