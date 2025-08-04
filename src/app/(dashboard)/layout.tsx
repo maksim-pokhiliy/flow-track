@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="min-h-screen bg-background">
-      <Header variant="landing" />
+      <Header variant="app" />
 
       {children}
 
