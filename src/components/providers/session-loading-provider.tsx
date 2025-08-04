@@ -9,7 +9,7 @@ interface SessionLoadingState {
 }
 
 interface SessionLoadingContextValue extends SessionLoadingState {
-  setCustomLoading?: (loading: boolean) => void;
+  setCustomLoading: (loading: boolean) => void;
 }
 
 interface SessionLoadingProviderProps {
@@ -29,9 +29,10 @@ export function SessionLoadingProvider({
 
   const [hasMinimumTimeElapsed, setHasMinimumTimeElapsed] = useState(false);
   const [startTime] = useState(() => Date.now());
+  const [customLoading, setCustomLoadingState] = useState(false);
 
   const isSessionLoading = status === "loading";
-  const isLoading = isSessionLoading || !hasMinimumTimeElapsed;
+  const isLoading = isSessionLoading || !hasMinimumTimeElapsed || customLoading;
 
   useEffect(() => {
     const timeElapsed = Date.now() - startTime;
@@ -47,6 +48,7 @@ export function SessionLoadingProvider({
   const contextValue: SessionLoadingContextValue = {
     isLoading,
     hasMinimumTimeElapsed,
+    setCustomLoading: (loading) => setCustomLoadingState(loading),
   };
 
   if (isLoading) {
