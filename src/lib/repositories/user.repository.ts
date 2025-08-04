@@ -19,6 +19,15 @@ export interface UserPublicData {
   createdAt: Date;
 }
 
+const USER_PUBLIC_FIELDS = {
+  id: true,
+  name: true,
+  email: true,
+  defaultHourlyRate: true,
+  currency: true,
+  createdAt: true,
+};
+
 export class UserRepository extends BaseRepository {
   findByEmail(email: string): Promise<User | null> {
     return this.execute("findByEmail", () =>
@@ -46,14 +55,7 @@ export class UserRepository extends BaseRepository {
           defaultHourlyRate: data.defaultHourlyRate,
           currency: data.currency,
         },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          defaultHourlyRate: true,
-          currency: true,
-          createdAt: true,
-        },
+        select: USER_PUBLIC_FIELDS,
       }),
     );
   }
@@ -63,14 +65,7 @@ export class UserRepository extends BaseRepository {
       this.db.user.update({
         where: { id },
         data,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          defaultHourlyRate: true,
-          currency: true,
-          createdAt: true,
-        },
+        select: USER_PUBLIC_FIELDS,
       }),
     );
   }
