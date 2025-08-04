@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { APP_CONFIG } from "@app/lib/config";
-import { UserRepository } from "@app/lib/repositories";
-import { AuthService } from "@app/lib/services";
+import { authService } from "@app/lib/services";
 
 const registerSchema = z.object({
   name: z
@@ -22,8 +21,6 @@ const registerSchema = z.object({
   defaultHourlyRate: z.number().min(APP_CONFIG.validation.hourlyRate.min).optional(),
   currency: z.string().optional(),
 });
-
-const authService = new AuthService(new UserRepository());
 
 export async function POST(request: NextRequest) {
   try {

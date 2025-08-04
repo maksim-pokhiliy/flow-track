@@ -4,8 +4,7 @@ import { z } from "zod";
 
 import { APP_CONFIG } from "@app/lib/config";
 import { env } from "@app/lib/env/env.server";
-import { UserRepository } from "@app/lib/repositories";
-import { AuthService } from "@app/lib/services";
+import { authService } from "@app/lib/services";
 
 const loginSchema = z.object({
   email: z.email("Invalid email format"),
@@ -16,8 +15,6 @@ const loginSchema = z.object({
       `Password must be at least ${APP_CONFIG.validation.password.minLength} characters`,
     ),
 });
-
-const authService = new AuthService(new UserRepository());
 
 export const authOptions: NextAuthOptions = {
   providers: [
