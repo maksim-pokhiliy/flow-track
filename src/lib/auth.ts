@@ -1,13 +1,19 @@
-import bcrypt from "bcryptjs";
 import { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 
-import { prisma } from "@app/lib/prisma";
+import { APP_CONFIG } from "@app/lib/config";
+import { env } from "@app/lib/env/env.server";
+import { AuthService } from "@app/lib/services";
 
 const loginSchema = z.object({
   email: z.email("Invalid email format"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z
+    .string()
+    .min(
+      APP_CONFIG.validation.password.minLength,
+      `Password must be at least ${APP_CONFIG.validation.password.minLength} characters`,
+    ),
 });
 
 export const authOptions: NextAuthOptions = {
@@ -25,29 +31,10 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Email and password are required");
           }
 
-          const { email, password } = loginSchema.parse(credentials);
+          const validatedCredentials = loginSchema.parse(credentials);
+          const user = await AuthService.authenticateUser(validatedCredentials);
 
-          const user = await prisma.user.findUnique({
-            where: { email: email.toLowerCase() },
-          });
-
-          if (!user) {
-            throw new Error("Invalid email or password");
-          }
-
-          const isPasswordValid = await bcrypt.compare(password, user.password);
-
-          if (!isPasswordValid) {
-            throw new Error("Invalid email or password");
-          }
-
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            defaultHourlyRate: user.defaultHourlyRate,
-            currency: user.currency,
-          };
+          return user;
         } catch (error) {
           console.error("Authentication error:", error);
 
@@ -58,10 +45,10 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: APP_CONFIG.auth.sessionMaxAge,
   },
   jwt: {
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: APP_CONFIG.auth.jwtMaxAge,
   },
   callbacks: {
     jwt({ token, user }) {
@@ -90,6 +77,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  secret: env.NEXTAUTH_SECRET,
+  debug: env.NODE_ENV === "development",
 };
