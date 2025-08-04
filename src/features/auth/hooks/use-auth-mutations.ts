@@ -6,11 +6,14 @@ import { toast } from "sonner";
 
 import { loginUser, registerUser } from "../api";
 
-export function useRegister() {
+function useAuthMutation<T>(
+  mutationFn: (data: T) => Promise<{ success: boolean; error?: string }>,
+  successMessage: string,
+) {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: registerUser,
+    mutationFn,
     onSuccess: (result) => {
       if (!result.success) {
         toast.error(result.error);
@@ -18,26 +21,16 @@ export function useRegister() {
         return;
       }
 
-      toast.success("Account created successfully!");
+      toast.success(successMessage);
       router.push("/dashboard");
     },
   });
 }
 
+export function useRegister() {
+  return useAuthMutation(registerUser, "Account created successfully!");
+}
+
 export function useLogin() {
-  const router = useRouter();
-
-  return useMutation({
-    mutationFn: loginUser,
-    onSuccess: (result) => {
-      if (!result.success) {
-        toast.error(result.error);
-
-        return;
-      }
-
-      toast.success("Welcome back!");
-      router.push("/dashboard");
-    },
-  });
+  return useAuthMutation(loginUser, "Welcome back!");
 }
