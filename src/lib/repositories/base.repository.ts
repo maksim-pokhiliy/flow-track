@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
+import { logger } from "@app/lib/logger";
 import { prisma } from "@app/lib/prisma";
 
 export abstract class BaseRepository {
@@ -18,7 +19,7 @@ export abstract class BaseRepository {
   }
 
   protected handleError(error: unknown, operation: string): never {
-    console.error(`Database error in ${operation}:`, error);
+    logger.error({ err: error, operation }, "Database error");
 
     if (error instanceof Error) {
       throw new Error(`${operation} failed: ${error.message}`);

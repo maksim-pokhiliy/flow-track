@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { APP_CONFIG } from "@app/lib/config";
 import { env } from "@app/lib/env/env.server";
+import { logger } from "@app/lib/logger";
 import { UserRepository } from "@app/lib/repositories";
 import { AuthService } from "@app/lib/services";
 
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
           return user;
         } catch (error) {
-          console.error("Authentication error:", error);
+          logger.error({ err: error, operation: "authorize" }, "Authentication error");
 
           return null;
         }

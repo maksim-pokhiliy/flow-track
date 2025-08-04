@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { APP_CONFIG } from "@app/lib/config";
+import { logger } from "@app/lib/logger";
 import { UserRepository } from "@app/lib/repositories";
 import { AuthService } from "@app/lib/services";
 
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Registration error:", error);
+    logger.error({ err: error, operation: "POST /api/register" }, "Registration error");
 
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid input", details: error.issues }, { status: 400 });
