@@ -1,7 +1,6 @@
 import { BarChart3, FileText, LucideIcon, Timer } from "lucide-react";
 import Link from "next/link";
 
-import { Header } from "@app/components/layout/header";
 import { Button } from "@app/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@app/components/ui/card";
 
@@ -32,8 +31,6 @@ const features: Feature[] = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
-      <Header variant="landing" />
-
       <section className="container mx-auto px-4 py-20 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">Beautiful Time Tracking</h1>
 
@@ -93,12 +90,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2025 Chronos. Built with Next.js and love.</p>
-        </div>
-      </footer>
     </div>
   );
 }
