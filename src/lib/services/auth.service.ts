@@ -2,15 +2,7 @@ import type { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { APP_CONFIG } from "@app/lib/config";
-import { type CreateUserInput, type UserPublicData } from "@app/lib/repositories";
-
-export interface CreateUserData {
-  name: string;
-  email: string;
-  password: string;
-  defaultHourlyRate?: number;
-  currency?: string;
-}
+import { type UserCreate, type UserPublicData } from "@app/lib/repositories";
 
 export interface AuthenticateUserData {
   email: string;
@@ -19,14 +11,14 @@ export interface AuthenticateUserData {
 
 export interface IUserRepository {
   existsByEmail(email: string): Promise<boolean>;
-  create(data: CreateUserInput): Promise<UserPublicData>;
+  create(data: Required<UserCreate>): Promise<UserPublicData>;
   findByEmail(email: string): Promise<User | null>;
 }
 
 export class AuthService {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async createUser(data: CreateUserData) {
+  async createUser(data: UserCreate) {
     const { name, email, password, defaultHourlyRate, currency } = data;
 
     const userExists = await this.userRepository.existsByEmail(email);
@@ -37,7 +29,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const userData: CreateUserInput = {
+    const userData: Required<UserCreate> = {
       name,
       email,
       password: hashedPassword,

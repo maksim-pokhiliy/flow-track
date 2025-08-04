@@ -1,23 +1,7 @@
 import type { User } from "@prisma/client";
 
 import { BaseRepository } from "./base.repository";
-
-export interface CreateUserInput {
-  name: string;
-  email: string;
-  password: string;
-  defaultHourlyRate: number;
-  currency: string;
-}
-
-export interface UserPublicData {
-  id: string;
-  name: string;
-  email: string;
-  defaultHourlyRate: number;
-  currency: string;
-  createdAt: Date;
-}
+import type { UserCreate, UserPublicData } from "./user.types";
 
 export class UserRepository extends BaseRepository {
   findByEmail(email: string): Promise<User | null> {
@@ -36,7 +20,7 @@ export class UserRepository extends BaseRepository {
     );
   }
 
-  create(data: CreateUserInput): Promise<UserPublicData> {
+  create(data: Required<UserCreate>): Promise<UserPublicData> {
     return this.execute("create", () =>
       this.db.user.create({
         data: {
@@ -58,7 +42,7 @@ export class UserRepository extends BaseRepository {
     );
   }
 
-  update(id: string, data: Partial<CreateUserInput>): Promise<UserPublicData> {
+  update(id: string, data: Partial<UserCreate>): Promise<UserPublicData> {
     return this.execute("update", () =>
       this.db.user.update({
         where: { id },
