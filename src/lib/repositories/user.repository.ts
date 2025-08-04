@@ -20,29 +20,25 @@ export interface UserPublicData {
 }
 
 export class UserRepository extends BaseRepository {
-  async findByEmail(email: string): Promise<User | null> {
-    try {
-      return await this.db.user.findUnique({
+  findByEmail(email: string): Promise<User | null> {
+    return this.execute("findByEmail", () =>
+      this.db.user.findUnique({
         where: { email: email.toLowerCase() },
-      });
-    } catch (error) {
-      this.handleError(error, "findByEmail");
-    }
+      }),
+    );
   }
 
-  async findById(id: string): Promise<User | null> {
-    try {
-      return await this.db.user.findUnique({
+  findById(id: string): Promise<User | null> {
+    return this.execute("findById", () =>
+      this.db.user.findUnique({
         where: { id },
-      });
-    } catch (error) {
-      this.handleError(error, "findById");
-    }
+      }),
+    );
   }
 
-  async create(data: CreateUserInput): Promise<UserPublicData> {
-    try {
-      return await this.db.user.create({
+  create(data: CreateUserInput): Promise<UserPublicData> {
+    return this.execute("create", () =>
+      this.db.user.create({
         data: {
           name: data.name,
           email: data.email.toLowerCase(),
@@ -58,15 +54,13 @@ export class UserRepository extends BaseRepository {
           currency: true,
           createdAt: true,
         },
-      });
-    } catch (error) {
-      this.handleError(error, "create");
-    }
+      }),
+    );
   }
 
-  async update(id: string, data: Partial<CreateUserInput>): Promise<UserPublicData> {
-    try {
-      return await this.db.user.update({
+  update(id: string, data: Partial<CreateUserInput>): Promise<UserPublicData> {
+    return this.execute("update", () =>
+      this.db.user.update({
         where: { id },
         data,
         select: {
@@ -77,32 +71,26 @@ export class UserRepository extends BaseRepository {
           currency: true,
           createdAt: true,
         },
-      });
-    } catch (error) {
-      this.handleError(error, "update");
-    }
+      }),
+    );
   }
 
   async delete(id: string): Promise<void> {
-    try {
-      await this.db.user.delete({
+    await this.execute("delete", () =>
+      this.db.user.delete({
         where: { id },
-      });
-    } catch (error) {
-      this.handleError(error, "delete");
-    }
+      }),
+    );
   }
 
-  async existsByEmail(email: string): Promise<boolean> {
-    try {
+  existsByEmail(email: string): Promise<boolean> {
+    return this.execute("existsByEmail", async () => {
       const user = await this.db.user.findUnique({
         where: { email: email.toLowerCase() },
         select: { id: true },
       });
 
       return !!user;
-    } catch (error) {
-      this.handleError(error, "existsByEmail");
-    }
+    });
   }
 }
