@@ -9,9 +9,9 @@ export async function loginUser(data: LoginData) {
     redirect: false,
   });
 
-  if (result?.error) {
-    throw new Error("Invalid email or password");
+  if (!result || result.error) {
+    return { success: false, error: "Invalid email or password" };
   }
 
-  return result;
+  return { success: true };
 }

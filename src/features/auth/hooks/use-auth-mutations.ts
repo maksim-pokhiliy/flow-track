@@ -11,12 +11,15 @@ export function useRegister() {
 
   return useMutation({
     mutationFn: registerUser,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (!result.success) {
+        toast.error(result.error);
+
+        return;
+      }
+
       toast.success("Account created successfully!");
       router.push("/dashboard");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
     },
   });
 }
@@ -26,12 +29,15 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: loginUser,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (!result.success) {
+        toast.error(result.error);
+
+        return;
+      }
+
       toast.success("Welcome back!");
       router.push("/dashboard");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
     },
   });
 }
