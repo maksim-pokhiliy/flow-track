@@ -1,27 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { APP_CONFIG } from "@app/lib/config";
+import { registerSchema } from "@app/features/auth";
 import { UserRepository } from "@app/lib/repositories";
 import { AuthService } from "@app/lib/services";
-
-const registerSchema = z.object({
-  name: z
-    .string()
-    .min(
-      APP_CONFIG.validation.name.minLength,
-      `Name must be at least ${APP_CONFIG.validation.name.minLength} characters`,
-    ),
-  email: z.email("Invalid email format"),
-  password: z
-    .string()
-    .min(
-      APP_CONFIG.validation.password.minLength,
-      `Password must be at least ${APP_CONFIG.validation.password.minLength} characters`,
-    ),
-  defaultHourlyRate: z.number().min(APP_CONFIG.validation.hourlyRate.min).optional(),
-  currency: z.string().optional(),
-});
 
 const authService = new AuthService(new UserRepository());
 

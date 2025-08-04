@@ -12,7 +12,7 @@ export const loginSchema = z.object({
     ),
 });
 
-export const registerSchema = z.object({
+const registerSchema = z.object({
   name: z
     .string()
     .min(
@@ -34,3 +34,5 @@ export const registerSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
+
+export { registerSchema };
