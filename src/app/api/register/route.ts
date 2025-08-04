@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { APP_CONFIG } from "@app/lib/config";
+import { UserRepository } from "@app/lib/repositories";
 import { AuthService } from "@app/lib/services";
 
 const registerSchema = z.object({
@@ -22,12 +23,14 @@ const registerSchema = z.object({
   currency: z.string().optional(),
 });
 
+const authService = new AuthService(new UserRepository());
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = registerSchema.parse(body);
 
-    const user = await AuthService.createUser(validatedData);
+    const user = await authService.createUser(validatedData);
 
     return NextResponse.json(
       {
