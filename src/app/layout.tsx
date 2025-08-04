@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
-import { AuthProvider, QueryProvider } from "@app/components/providers";
+import { AuthProvider, QueryProvider, SessionLoadingProvider } from "@app/components/providers";
 import { Toaster } from "@app/components/ui/sonner";
+import { APP_CONFIG } from "@app/lib/config";
 
 import "./globals.css";
 
@@ -18,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chronos - Time Tracker",
-  description: "Beautiful time tracking with projects, tasks and invoices",
+  title: `${APP_CONFIG.name} - Time Tracker`,
+  description: APP_CONFIG.description,
 };
 
 export default function RootLayout({
@@ -38,8 +39,10 @@ export default function RootLayout({
         >
           <QueryProvider>
             <AuthProvider>
-              {children}
-              <Toaster />
+              <SessionLoadingProvider minimumLoadingTime={APP_CONFIG.ui.minimumLoadingTime}>
+                {children}
+                <Toaster />
+              </SessionLoadingProvider>
             </AuthProvider>
           </QueryProvider>
         </ThemeProvider>

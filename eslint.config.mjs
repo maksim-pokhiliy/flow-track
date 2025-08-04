@@ -110,7 +110,7 @@ const eslintConfig = [
       "@next/next/no-page-custom-font": "warn",
 
       // General JavaScript rules
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": ["warn", { allow: ["warn", "error", "group", "groupEnd"] }],
       "no-debugger": "error",
       "no-alert": "error",
       "no-var": "error",

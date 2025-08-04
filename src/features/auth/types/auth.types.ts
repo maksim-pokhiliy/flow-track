@@ -1,10 +1,10 @@
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  defaultHourlyRate: number;
-  currency: string;
-}
+import type { User as PrismaUser } from "@prisma/client";
+
+export type User = PrismaUser;
+
+export type UserPublic = Omit<User, "password">;
+
+export type UserSession = Pick<User, "id" | "email" | "name" | "defaultHourlyRate" | "currency">;
 
 export interface LoginData {
   email: string;
@@ -19,5 +19,5 @@ export interface RegisterData {
 }
 
 export interface AuthSession {
-  user: User;
+  user: UserSession;
 }
