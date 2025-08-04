@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@app/components/ui/form";
 import { Input } from "@app/components/ui/input";
+import { APP_CONFIG } from "@app/lib/config";
 
 import { useRegister } from "../../hooks/use-auth-mutations";
 import { RegisterFormData, registerSchema } from "../../schemas/auth.schemas";
@@ -26,7 +27,7 @@ export function RegisterForm() {
       name: "",
       email: "",
       password: "",
-      defaultHourlyRate: 50,
+      defaultHourlyRate: APP_CONFIG.defaults.hourlyRate,
     },
   });
 
@@ -108,9 +109,11 @@ export function RegisterForm() {
                   type="number"
                   min="0"
                   step="0.01"
-                  placeholder="50"
+                  placeholder={APP_CONFIG.defaults.hourlyRate.toString()}
                   disabled={isPending}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  onChange={(e) =>
+                    field.onChange(parseFloat(e.target.value) || APP_CONFIG.defaults.hourlyRate)
+                  }
                 />
               </FormControl>
 

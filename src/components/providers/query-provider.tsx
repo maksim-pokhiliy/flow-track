@@ -16,6 +16,10 @@ export function QueryProvider({ children }: QueryProviderProps) {
           queries: {
             staleTime: 60 * 1000,
             retry: 1,
+            throwOnError: true,
+          },
+          mutations: {
+            throwOnError: true,
           },
         },
       }),
@@ -24,7 +28,6 @@ export function QueryProvider({ children }: QueryProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
