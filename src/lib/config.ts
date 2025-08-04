@@ -8,7 +8,6 @@ export const APP_CONFIG = {
   },
 
   ui: {
-    minimumLoadingTime: 2000,
     toastDuration: 4000,
   },
 

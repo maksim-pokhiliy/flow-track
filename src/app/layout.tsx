@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
-import { AuthProvider, QueryProvider, SessionLoadingProvider } from "@app/components/providers";
+import { AuthProvider, QueryProvider, SessionLoader } from "@app/components/providers";
 import { Toaster } from "@app/components/ui/sonner";
 import { APP_CONFIG } from "@app/lib/config";
 
@@ -39,10 +39,10 @@ export default function RootLayout({
         >
           <QueryProvider>
             <AuthProvider>
-              <SessionLoadingProvider minimumLoadingTime={APP_CONFIG.ui.minimumLoadingTime}>
+              <SessionLoader>
                 {children}
                 <Toaster />
-              </SessionLoadingProvider>
+              </SessionLoader>
             </AuthProvider>
           </QueryProvider>
         </ThemeProvider>
