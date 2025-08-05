@@ -50,6 +50,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "lefthook",
+      "@tailwindcss/oxide",
       "sharp",
       "unrs-resolver"
     ]
