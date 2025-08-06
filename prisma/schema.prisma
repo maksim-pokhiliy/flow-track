@@ -1,0 +1,193 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+// ==========================================
+// Auth Models (NextAuth.js compatible)
+// ==========================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  password      String? // null for OAuth users
+  name          String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts         Account[]
+  sessions         Session[]
+  workspaceMembers WorkspaceMember[]
+  ownedWorkspaces  Workspace[]       @relation("WorkspaceOwner")
+
+  @@index([email])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ==========================================
+// Business Models
+// ==========================================
+
+enum WorkspacePlan {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+model Workspace {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?
+  logo        String?
+  plan        WorkspacePlan @default(FREE)
+  ownerId     String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  owner    User              @relation("WorkspaceOwner", fields: [ownerId], references: [id])
+  members  WorkspaceMember[]
+  projects Project[]
+
+  @@index([slug])
+  @@index([ownerId])
+  @@map("workspaces")
+}
+
+model WorkspaceMember {
+  id          String     @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        MemberRole @default(MEMBER)
+  joinedAt    DateTime   @default(now())
+
+  // Relations
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+  @@index([userId])
+  @@map("workspace_members")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  description String?
+  color       String?
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  timeEntries TimeEntry[]
+
+  @@index([workspaceId])
+  @@map("projects")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  description String?
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  timeEntries TimeEntry[]
+
+  @@index([projectId])
+  @@map("tasks")
+}
+
+model TimeEntry {
+  id          String    @id @default(cuid())
+  workspaceId String
+  projectId   String
+  taskId      String?
+  userId      String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int? // in seconds, calculated on stop
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  task    Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([projectId])
+  @@index([taskId])
+  @@index([userId])
+  @@index([startTime])
+  @@map("time_entries")
+}
