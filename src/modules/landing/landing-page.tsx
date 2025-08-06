@@ -15,7 +15,7 @@ export function LandingPage() {
         <CTASection />
       </Container>
 
-      <BackgroundPattern variant="dots" opacity={0.4} className="fixed" />
+      <BackgroundPattern variant="dots" opacity={0.2} className="fixed" />
     </>
   );
 }
