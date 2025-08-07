@@ -7,5 +7,6 @@ export * from "./icon-box";
 export * from "./input";
 export * from "./label";
 export * from "./separator";
+export * from "./sonner";
 export * from "./stack";
 export * from "./typography";

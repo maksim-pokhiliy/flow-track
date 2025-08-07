@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button, FormField, Stack, Typography } from "@app/components";
 
@@ -16,7 +17,6 @@ export function LoginForm() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -28,7 +28,6 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true);
-    setError(null);
 
     try {
       const result = await signIn("credentials", {
@@ -38,15 +37,33 @@ export function LoginForm() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        if (result.error === "CredentialsSignin") {
+          toast.error("Invalid credentials", {
+            description: "Please check your email and password and try again.",
+          });
+        } else {
+          toast.error("Sign in failed", {
+            description: result.error,
+          });
+        }
+
         setIsLoading(false);
 
         return;
       }
 
+      toast.success("Welcome back!", {
+        description: "You have successfully signed in.",
+      });
+
       router.refresh();
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (error) {
+      console.error("Sign in error:", error);
+
+      toast.error("Something went wrong", {
+        description: "An unexpected error occurred. Please try again.",
+      });
+
       setIsLoading(false);
     }
   };
@@ -54,14 +71,6 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
-        {error && (
-          <div className="rounded-lg bg-destructive/10 p-3">
-            <Typography variant="body2" className="text-destructive">
-              {error}
-            </Typography>
-          </div>
-        )}
-
         <FormField
           label="Email"
           type="email"
