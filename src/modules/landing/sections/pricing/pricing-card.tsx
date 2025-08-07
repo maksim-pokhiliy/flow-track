@@ -40,12 +40,7 @@ export function PricingCard({
   ctaVariant = "default",
 }: PricingCardProps) {
   return (
-    <Card
-      className={cn(
-        "relative h-full flex flex-col",
-        highlighted && "md:border-primary md:shadow-lg md:scale-105",
-      )}
-    >
+    <Card className={cn("relative h-full flex flex-col", highlighted && "md:scale-105")}>
       {badge && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
           <Badge variant="gradient" size="lg">
