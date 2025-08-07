@@ -8,10 +8,24 @@ export async function POST(request: Request) {
     const validationResult = registerSchema.safeParse(body);
 
     if (!validationResult.success) {
+      const firstError = validationResult.error.issues[0];
+      const errorMessage = firstError
+        ? `${firstError.path.join(".")}: ${firstError.message}`
+        : "Please check your input and try again";
+
+      const fieldErrors: Record<string, string[]> = {};
+
+      validationResult.error.issues.forEach((issue) => {
+        const field = issue.path.join(".");
+
+        fieldErrors[field] ??= [];
+        fieldErrors[field].push(issue.message);
+      });
+
       return Response.json(
         {
-          error: "Validation failed",
-          details: validationResult.error.flatten(),
+          error: errorMessage,
+          details: fieldErrors,
         },
         { status: 400 },
       );
@@ -20,7 +34,15 @@ export async function POST(request: Request) {
     const userResult = await container.useCases.registerUser.execute(validationResult.data);
 
     if (!userResult.success) {
-      return Response.json({ error: userResult.error.message }, { status: 400 });
+      let errorMessage = userResult.error.message;
+
+      if (errorMessage.includes("already exists")) {
+        errorMessage = "An account with this email already exists. Please sign in instead.";
+      } else if (errorMessage.includes("Failed to create user")) {
+        errorMessage = "Unable to create your account. Please try again.";
+      }
+
+      return Response.json({ error: errorMessage }, { status: 400 });
     }
 
     const workspaceResult = await container.useCases.createWorkspace.execute({
@@ -43,6 +65,9 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Registration error:", error);
 
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return Response.json(
+      { error: "Something went wrong. Please try again later." },
+      { status: 500 },
+    );
   }
 }

@@ -7,15 +7,15 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { Button, Stack, Typography } from "@app/components";
+import { Button, FormField, Stack, Typography } from "@app/components";
 
 import { type RegisterInput, registerSchema } from "../schemas/auth.schema";
 
 export function RegisterForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -27,10 +27,8 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true);
-    setError(null);
 
     try {
-      // 1. Регистрируем пользователя
       const response = await fetch("/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,10 +38,14 @@ export function RegisterForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error ?? "Registration failed");
+        toast.error("Registration failed", {
+          description: result.error ?? "Unable to create your account. Please try again.",
+        });
+        setIsLoading(false);
+
+        return;
       }
 
-      // 2. Автоматически логинимся
       const signInResult = await signIn("credentials", {
         email: data.email,
         password: data.password,
@@ -51,13 +53,28 @@ export function RegisterForm() {
       });
 
       if (signInResult?.error) {
-        throw new Error("Failed to sign in after registration");
+        toast.warning("Account created", {
+          description: "Your account was created successfully. Please sign in manually.",
+        });
+
+        router.push("/login");
+
+        return;
       }
 
-      // 3. Редиректим на dashboard
+      toast.success("Welcome to Chronos!", {
+        description: "Your account has been created successfully.",
+      });
+
+      router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      console.error("Registration error:", err);
+
+      toast.error("Something went wrong", {
+        description: "An unexpected error occurred. Please try again.",
+      });
+
       setIsLoading(false);
     }
   };
@@ -65,72 +82,39 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
-        {error && (
-          <div className="rounded-lg bg-destructive/10 p-3">
-            <Typography variant="body2" className="text-destructive">
-              {error}
-            </Typography>
-          </div>
-        )}
+        <FormField
+          label="Name"
+          type="text"
+          placeholder="John Doe"
+          error={errors.name?.message}
+          disabled={isLoading}
+          required
+          autoComplete="name"
+          {...register("name")}
+        />
 
-        <Stack spacing={2}>
-          <label htmlFor="name" className="text-sm font-medium">
-            Name (optional)
-          </label>
-          <input
-            id="name"
-            type="text"
-            {...register("name")}
-            className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="John Doe"
-            disabled={isLoading}
-          />
-          {errors.name && (
-            <Typography variant="caption" className="text-destructive">
-              {errors.name.message}
-            </Typography>
-          )}
-        </Stack>
+        <FormField
+          label="Email"
+          type="email"
+          placeholder="john@example.com"
+          error={errors.email?.message}
+          disabled={isLoading}
+          required
+          autoComplete="email"
+          {...register("email")}
+        />
 
-        <Stack spacing={2}>
-          <label htmlFor="email" className="text-sm font-medium">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="john@example.com"
-            disabled={isLoading}
-            autoComplete="email"
-          />
-          {errors.email && (
-            <Typography variant="caption" className="text-destructive">
-              {errors.email.message}
-            </Typography>
-          )}
-        </Stack>
-
-        <Stack spacing={2}>
-          <label htmlFor="password" className="text-sm font-medium">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="••••••••"
-            disabled={isLoading}
-            autoComplete="new-password"
-          />
-          {errors.password && (
-            <Typography variant="caption" className="text-destructive">
-              {errors.password.message}
-            </Typography>
-          )}
-        </Stack>
+        <FormField
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          error={errors.password?.message}
+          disabled={isLoading}
+          required
+          hint="At least 8 characters with uppercase, lowercase and numbers"
+          autoComplete="new-password"
+          {...register("password")}
+        />
 
         <Button type="submit" variant="gradient" fullWidth disabled={isLoading}>
           {isLoading ? (
