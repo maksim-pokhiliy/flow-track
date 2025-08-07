@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { Toaster } from "@app/components";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,6 +23,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <main>{children}</main>
+
+        <Toaster />
       </body>
     </html>
   );
