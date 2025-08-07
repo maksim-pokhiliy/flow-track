@@ -18,7 +18,7 @@ export function LandingHeader() {
           </nav>
 
           <Stack direction="row" align="center">
-            <Button variant="ghost" asChild>
+            <Button variant="outline" asChild>
               <Link href="/login">Sign In</Link>
             </Button>
 

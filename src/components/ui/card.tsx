@@ -5,12 +5,12 @@ import { Stack } from "@app/components/ui/stack";
 import { Typography } from "@app/components/ui/typography";
 import { cn } from "@app/lib/utils";
 
-const cardVariants = cva("bg-white dark:bg-gray-900 rounded-xl transition-shadow duration-200", {
+const cardVariants = cva("bg-background rounded-xl transition-shadow duration-200", {
   variants: {
     variant: {
-      default: "border shadow-sm",
+      default: "border-2 border-border shadow-sm",
       elevated: "border shadow-lg",
-      ghost: "bg-transparent dark:bg-transparent border-0 shadow-none",
+      ghost: "bg-transparent border-0 shadow-none",
       gradient:
         "border-0 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800",
       interactive:
