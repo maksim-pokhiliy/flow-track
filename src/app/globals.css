@@ -1,11 +1,25 @@
 @import "tailwindcss";
 
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+}
+
 :root {
-  /* Brand colors */
   --brand-blue: 217 91% 60%;
   --brand-purple: 263 70% 65%;
+  --brand-cyan: 195 90% 55%;
+  --brand-indigo: 245 75% 60%;
+  --brand-pink: 340 80% 60%;
+  --brand-rose: 350 85% 65%;
 
-  /* System colors */
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
 
@@ -41,6 +55,10 @@
   :root {
     --brand-blue: 217 91% 60%;
     --brand-purple: 263 70% 65%;
+    --brand-cyan: 195 90% 55%;
+    --brand-indigo: 245 75% 60%;
+    --brand-pink: 340 80% 60%;
+    --brand-rose: 350 85% 65%;
 
     --background: 222 47% 11%;
     --foreground: 213 31% 91%;
@@ -72,10 +90,6 @@
   }
 }
 
-* {
-  border-color: hsl(var(--border));
-}
-
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -90,15 +104,63 @@ body {
   }
 
   .bg-gradient-pink-rose {
-    background: linear-gradient(135deg, hsl(340 80% 60%), hsl(350 85% 65%));
+    background: linear-gradient(135deg, hsl(var(--brand-pink)), hsl(var(--brand-rose)));
   }
 
   .bg-gradient-blue-cyan {
-    background: linear-gradient(135deg, hsl(217 91% 60%), hsl(195 90% 55%));
+    background: linear-gradient(135deg, hsl(var(--brand-blue)), hsl(var(--brand-cyan)));
   }
 
   .bg-gradient-purple-indigo {
-    background: linear-gradient(135deg, hsl(263 70% 65%), hsl(245 75% 60%));
+    background: linear-gradient(135deg, hsl(var(--brand-purple)), hsl(var(--brand-indigo)));
+  }
+
+  .text-destructive {
+    color: hsl(var(--destructive));
+  }
+
+  .text-destructive-foreground {
+    color: hsl(var(--destructive-foreground));
+  }
+
+  .border-destructive {
+    border-color: hsl(var(--destructive));
+  }
+
+  .ring-destructive {
+    --tw-ring-color: hsl(var(--destructive));
+  }
+
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+
+  .bg-destructive-foreground {
+    background-color: hsl(var(--destructive-foreground));
+  }
+
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .border-input {
+    border-color: hsl(var(--input));
+  }
+
+  .border-ring {
+    border-color: hsl(var(--ring));
+  }
+
+  .ring-ring {
+    --tw-ring-color: hsl(var(--ring));
+  }
+
+  .bg-input {
+    background-color: hsl(var(--input));
+  }
+
+  .animate-clock-tick {
+    animation: clockTick 2s ease-in-out infinite;
   }
 }
 
@@ -112,11 +174,5 @@ body {
   }
   75% {
     transform: rotate(-6deg);
-  }
-}
-
-@layer utilities {
-  .animate-clock-tick {
-    animation: clockTick 2s ease-in-out infinite;
   }
 }

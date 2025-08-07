@@ -49,7 +49,7 @@ export function BackgroundPattern({
       style={{ opacity }}
       {...props}
     >
-      <div className="absolute inset-0 text-foreground/10">{patterns[variant]}</div>
+      <div className="absolute inset-0 text-foreground">{patterns[variant]}</div>
     </div>
   );
 }
