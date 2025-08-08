@@ -1,3 +1,5 @@
-export default function LoginPage() {
-  return <div className="p-8">Login (stub)</div>;
-}
+export { LoginForm as default } from "@app/modules/user";
+
+export const metadata = {
+  title: "Login",
+};

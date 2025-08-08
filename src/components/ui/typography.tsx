@@ -1,6 +1,6 @@
 import { type ElementType } from "react";
 
-import { cn } from "@app/shared/lib/cn";
+import { cn } from "@app/shared/lib";
 
 type Variant =
   | "h1"

@@ -1,8 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
 import * as React from "react";
 
-import { cn } from "@app/lib/utils";
+import { cn } from "@app/shared/lib";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -32,25 +33,68 @@ const buttonVariants = cva(
   },
 );
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  loading?: boolean;
+  loadingText?: string;
 }
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading = false,
+      loadingText,
+      disabled,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = asChild ? Slot : "button";
+
+    const content = loading ? (
+      <>
+        <Loader2 className="size-4 animate-spin" />
+        {loadingText ?? children}
+      </>
+    ) : (
+      children
+    );
+
+    if (asChild && loading) {
+      return (
+        <Comp
+          data-slot="button"
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          disabled={disabled ?? loading}
+          {...props}
+        >
+          <span className="inline-flex items-center gap-2">{content}</span>
+        </Comp>
+      );
+    }
+
+    return (
+      <Comp
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={disabled ?? loading}
+        {...props}
+      >
+        {content}
+      </Comp>
+    );
+  },
+);
+
+Button.displayName = "Button";
 
 export { Button, buttonVariants };

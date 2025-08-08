@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      "@auth/prisma-adapter":
+        specifier: ^2.10.0
+        version: 2.10.0(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))
       "@prisma/client":
         specifier: ^6.13.0
         version: 6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2)
@@ -28,6 +31,9 @@ importers:
       "@tanstack/react-query":
         specifier: ^5.84.1
         version: 5.84.1(react@19.1.0)
+      bcrypt:
+        specifier: ^6.0.0
+        version: 6.0.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -77,6 +83,9 @@ importers:
       "@tailwindcss/postcss":
         specifier: ^4.1.11
         version: 4.1.11
+      "@types/bcrypt":
+        specifier: ^6.0.0
+        version: 6.0.0
       "@types/node":
         specifier: ^20.19.9
         version: 20.19.9
@@ -152,6 +161,31 @@ packages:
         integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==,
       }
     engines: { node: ">=6.0.0" }
+
+  "@auth/core@0.40.0":
+    resolution:
+      {
+        integrity: sha512-n53uJE0RH5SqZ7N1xZoMKekbHfQgjd0sAEyUbE+IYJnmuQkbvuZnXItCU7d+i7Fj8VGOgqvNO7Mw4YfBTlZeQw==,
+      }
+    peerDependencies:
+      "@simplewebauthn/browser": ^9.0.1
+      "@simplewebauthn/server": ^9.0.2
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      "@simplewebauthn/browser":
+        optional: true
+      "@simplewebauthn/server":
+        optional: true
+      nodemailer:
+        optional: true
+
+  "@auth/prisma-adapter@2.10.0":
+    resolution:
+      {
+        integrity: sha512-EliOQoTjGK87jWWqnJvlQjbR4PjQZQqtwRwPAe108WwT9ubuuJJIrL68aNnQr4hFESz6P7SEX2bZy+y2yL37Gw==,
+      }
+    peerDependencies:
+      "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5 || >=6"
 
   "@babel/code-frame@7.27.1":
     resolution:
@@ -1403,6 +1437,12 @@ packages:
         integrity: sha512-VyyPYFlOMNylG45GoAe0xDoLwWuowvf92F9kySqzYh8vmYm7D2u4iUJKa1tOUpS70Ku13ASrOkS4ScXFsTaCNQ==,
       }
 
+  "@types/bcrypt@6.0.0":
+    resolution:
+      {
+        integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==,
+      }
+
   "@types/conventional-commits-parser@5.0.1":
     resolution:
       {
@@ -1864,6 +1904,13 @@ packages:
       {
         integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==,
       }
+
+  bcrypt@6.0.0:
+    resolution:
+      {
+        integrity: sha512-cU8v/EGSrnH+HnxV2z0J7/blxH8gq7Xh2JFT6Aroax7UohdmiJJlxApMxtKfuI7z68NvvVcmR78k2LbT6efhRg==,
+      }
+    engines: { node: ">= 18" }
 
   brace-expansion@1.1.12:
     resolution:
@@ -3145,6 +3192,12 @@ packages:
         integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==,
       }
 
+  jose@6.0.12:
+    resolution:
+      {
+        integrity: sha512-T8xypXs8CpmiIi78k0E+Lk7T2zlK4zDyg+o1CZ4AkOHgDg98ogdP2BeZ61lTFKFyoEwJ9RgAgN+SdM3iPgNonQ==,
+      }
+
   js-tokens@4.0.0:
     resolution:
       {
@@ -3665,11 +3718,25 @@ packages:
       sass:
         optional: true
 
+  node-addon-api@8.5.0:
+    resolution:
+      {
+        integrity: sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==,
+      }
+    engines: { node: ^18 || ^20 || >= 21 }
+
   node-fetch-native@1.6.7:
     resolution:
       {
         integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==,
       }
+
+  node-gyp-build@4.8.4:
+    resolution:
+      {
+        integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==,
+      }
+    hasBin: true
 
   normalize-package-data@6.0.2:
     resolution:
@@ -3685,6 +3752,12 @@ packages:
       }
     engines: { node: ^14.16.0 || >=16.10.0 }
     hasBin: true
+
+  oauth4webapi@3.6.2:
+    resolution:
+      {
+        integrity: sha512-hwWLiyBYuqhVdcIUJMJVKdEvz+DCweOcbSfqDyIv9PuUwrNfqrzfHP2bypZgZdbYOS67QYqnAnvZa2BJwBBrHw==,
+      }
 
   oauth@0.9.15:
     resolution:
@@ -3930,6 +4003,20 @@ packages:
       }
     peerDependencies:
       preact: ">=10"
+
+  preact-render-to-string@6.5.11:
+    resolution:
+      {
+        integrity: sha512-ubnauqoGczeGISiOh6RjX0/cdaF8v/oDXIjO85XALCQjwQP+SB4RDXXtvZ6yTYSjG+PC1QRP2AhPgCEsM2EvUw==,
+      }
+    peerDependencies:
+      preact: ">=10"
+
+  preact@10.24.3:
+    resolution:
+      {
+        integrity: sha512-Z2dPnBnMUfyQfSQ+GBdsGa16hz35YmLmtTLhM169uW944hYL6xzTYkJjC07j+Wosz733pMWx0fgON3JNw1jJQA==,
+      }
 
   preact@10.27.0:
     resolution:
@@ -4763,6 +4850,23 @@ snapshots:
       "@jridgewell/gen-mapping": 0.3.12
       "@jridgewell/trace-mapping": 0.3.29
 
+  "@auth/core@0.40.0":
+    dependencies:
+      "@panva/hkdf": 1.2.1
+      jose: 6.0.12
+      oauth4webapi: 3.6.2
+      preact: 10.24.3
+      preact-render-to-string: 6.5.11(preact@10.24.3)
+
+  "@auth/prisma-adapter@2.10.0(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))":
+    dependencies:
+      "@auth/core": 0.40.0
+      "@prisma/client": 6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2)
+    transitivePeerDependencies:
+      - "@simplewebauthn/browser"
+      - "@simplewebauthn/server"
+      - nodemailer
+
   "@babel/code-frame@7.27.1":
     dependencies:
       "@babel/helper-validator-identifier": 7.27.1
@@ -5546,6 +5650,10 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  "@types/bcrypt@6.0.0":
+    dependencies:
+      "@types/node": 20.19.9
+
   "@types/conventional-commits-parser@5.0.1":
     dependencies:
       "@types/node": 20.19.9
@@ -5843,6 +5951,11 @@ snapshots:
   axobject-query@4.1.0: {}
 
   balanced-match@1.0.2: {}
+
+  bcrypt@6.0.0:
+    dependencies:
+      node-addon-api: 8.5.0
+      node-gyp-build: 4.8.4
 
   brace-expansion@1.1.12:
     dependencies:
@@ -6741,6 +6854,8 @@ snapshots:
 
   jose@4.15.9: {}
 
+  jose@6.0.12: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@4.1.0:
@@ -6994,7 +7109,11 @@ snapshots:
       - "@babel/core"
       - babel-plugin-macros
 
+  node-addon-api@8.5.0: {}
+
   node-fetch-native@1.6.7: {}
+
+  node-gyp-build@4.8.4: {}
 
   normalize-package-data@6.0.2:
     dependencies:
@@ -7009,6 +7128,8 @@ snapshots:
       pathe: 2.0.3
       pkg-types: 2.2.0
       tinyexec: 1.0.1
+
+  oauth4webapi@3.6.2: {}
 
   oauth@0.9.15: {}
 
@@ -7157,6 +7278,12 @@ snapshots:
     dependencies:
       preact: 10.27.0
       pretty-format: 3.8.0
+
+  preact-render-to-string@6.5.11(preact@10.24.3):
+    dependencies:
+      preact: 10.24.3
+
+  preact@10.24.3: {}
 
   preact@10.27.0: {}
 
