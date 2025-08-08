@@ -1,3 +1,5 @@
+"use client";
+
 import { type ElementType, forwardRef, type ReactNode } from "react";
 
 import { cn } from "@app/shared/lib";

@@ -1,3 +1,5 @@
+"use client";
+
 import { prisma } from "@app/shared/lib";
 
 import { hashPassword, verifyPassword } from "./password-service";

@@ -1,4 +1,4 @@
-import * as React from "react";
+"use client";
 
 import { cn } from "@app/shared/lib";
 

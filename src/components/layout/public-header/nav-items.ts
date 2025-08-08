@@ -1,3 +1,5 @@
+"use client";
+
 export const navItems = [
   { href: "/pricing", label: "Pricing" },
   { href: "/features", label: "Features" },

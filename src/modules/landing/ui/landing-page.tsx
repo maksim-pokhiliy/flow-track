@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "@app/components/ui";
 import { Typography } from "@app/components/ui/typography";
 
