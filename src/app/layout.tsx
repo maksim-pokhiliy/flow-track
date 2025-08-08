@@ -1,7 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { Toaster } from "@app/components";
-
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,11 +19,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main>{children}</main>
-
-        <Toaster />
-      </body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );
 }

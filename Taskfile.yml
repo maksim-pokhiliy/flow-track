@@ -47,7 +47,7 @@ tasks:
   # Quality checks
   check:
     desc: Run quick quality checks
-    deps: [lint, type-check, format:check]
+    deps: [lint, typecheck, format:check]
 
   check:build:
     desc: Run checks and build (for deployment)
