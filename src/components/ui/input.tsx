@@ -1,6 +1,8 @@
+"use client";
+
 import * as React from "react";
 
-import { cn } from "@app/lib/utils";
+import { cn } from "@app/shared/lib";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (

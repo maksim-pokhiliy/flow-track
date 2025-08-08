@@ -1,3 +1,9 @@
+import { LoginForm } from "@app/modules/user/ui";
+
+export const metadata = {
+  title: "Login",
+};
+
 export default function LoginPage() {
-  return <div className="p-8">Login (stub)</div>;
+  return <LoginForm />;
 }
