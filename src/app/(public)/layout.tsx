@@ -1,15 +1,11 @@
-import { LandingHeader } from "@app/components";
+import { PublicHeader } from "@app/components/layout";
 
-type LandingLayoutProps = Readonly<{
-  children: React.ReactNode;
-}>;
-
-export default function LandingLayout({ children }: LandingLayoutProps) {
+export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <LandingHeader />
+      <PublicHeader />
 
-      {children}
+      <main>{children}</main>
     </>
   );
 }

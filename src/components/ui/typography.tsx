@@ -1,69 +1,49 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import { type ElementType } from "react";
 
-import { cn } from "@app/lib/utils";
+import { cn } from "@app/shared/lib/cn";
 
-const typographyVariants = cva("", {
-  variants: {
-    variant: {
-      h1: "text-6xl font-bold tracking-tight",
-      h2: "text-5xl font-bold tracking-tight",
-      h3: "text-4xl font-bold tracking-tight",
-      h4: "text-3xl font-semibold tracking-tight",
-      h5: "text-2xl font-semibold",
-      h6: "text-xl font-semibold",
-      subtitle1: "text-lg font-medium",
-      subtitle2: "text-base font-medium",
-      body1: "text-base",
-      body2: "text-sm",
-      button: "text-sm font-medium uppercase tracking-wider",
-      caption: "text-xs text-muted-foreground",
-      overline: "text-xs font-medium uppercase tracking-widest text-muted-foreground",
-    },
-  },
-  defaultVariants: {
-    variant: "body1",
-  },
-});
+type Variant =
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "body1"
+  | "body2"
+  | "subtitle1"
+  | "subtitle2"
+  | "caption"
+  | "overline"
+  | "button";
 
-interface TypographyProps
-  extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof typographyVariants> {
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
+type MapItem = { tag: ElementType; cls: string };
+
+const map: Record<Variant, MapItem> = {
+  h1: { tag: "h1", cls: "text-4xl font-semibold" },
+  h2: { tag: "h2", cls: "text-3xl font-semibold" },
+  h3: { tag: "h3", cls: "text-2xl font-semibold" },
+  h4: { tag: "h4", cls: "text-xl font-semibold" },
+  h5: { tag: "h5", cls: "text-lg font-semibold" },
+  h6: { tag: "h6", cls: "text-base font-semibold" },
+  body1: { tag: "p", cls: "text-base" },
+  body2: { tag: "p", cls: "text-sm" },
+  subtitle1: { tag: "p", cls: "text-base font-medium" },
+  subtitle2: { tag: "p", cls: "text-sm font-medium" },
+  caption: { tag: "span", cls: "text-xs" },
+  overline: { tag: "span", cls: "text-[10px] uppercase tracking-wide" },
+  button: { tag: "span", cls: "text-sm font-medium" },
+};
+
+type TypographyProps = React.PropsWithChildren<{
+  variant?: Variant;
+  className?: string;
+  as?: ElementType;
+}>;
+
+export function Typography({ variant = "body1", className, as, children }: TypographyProps) {
+  const item = map[variant];
+  const Tag = (as ?? item.tag) as ElementType;
+
+  return <Tag className={cn(item.cls, className)}>{children}</Tag>;
 }
-
-const Typography = React.forwardRef<HTMLElement, TypographyProps>(
-  ({ className, variant = "body1", as, children, ...props }, ref) => {
-    const componentMap = {
-      h1: "h1",
-      h2: "h2",
-      h3: "h3",
-      h4: "h4",
-      h5: "h5",
-      h6: "h6",
-      subtitle1: "h6",
-      subtitle2: "h6",
-      body1: "p",
-      body2: "p",
-      button: "span",
-      caption: "span",
-      overline: "span",
-    } as const;
-
-    const Component = as ?? componentMap[variant ?? "body1"] ?? "p";
-
-    return React.createElement(
-      Component,
-      {
-        ref,
-        className: cn(typographyVariants({ variant }), className),
-        ...props,
-      },
-      children,
-    );
-  },
-);
-
-Typography.displayName = "Typography";
-
-export { Typography, typographyVariants };
