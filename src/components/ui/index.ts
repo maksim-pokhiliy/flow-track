@@ -10,6 +10,7 @@ export * from "./form";
 export * from "./input";
 export * from "./logo";
 export * from "./separator";
+export * from "./sonner";
 export * from "./stack";
 export * from "./table";
 export * from "./tabs";

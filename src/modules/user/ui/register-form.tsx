@@ -1,75 +1,96 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { Button, Container, Input, Stack, Typography } from "@app/components/ui";
+import {
+  Button,
+  Container,
+  Form,
+  FormField,
+  FormInput,
+  Stack,
+  Typography,
+} from "@app/components/ui";
 
 import { useRegister } from "../api";
+import { type RegisterInput, registerSchema } from "../model";
 
 export function RegisterForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const { mutate: register, isPending } = useRegister();
 
-  const { mutate: register, isPending, error } = useRegister();
+  const form = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    register({ email, password, name });
+  const onSubmit = (data: RegisterInput) => {
+    register(data);
   };
 
   return (
     <Stack direction="column" align="center" justify="center" className="min-h-screen">
       <Container maxWidth="sm" className="w-full">
-        <Stack direction="column" spacing={8} align="center">
-          <Typography variant="h3">Create account</Typography>
+        <Stack direction="column" spacing={8}>
+          <Stack direction="column" spacing={2} align="center">
+            <Typography className="text-center" variant="h3">
+              Create account
+            </Typography>
 
-          <form onSubmit={handleSubmit} className="w-full">
-            <Stack direction="column" spacing={4}>
+            <Typography variant="body2" className="text-muted-foreground text-center">
+              Get started with your free account
+            </Typography>
+          </Stack>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <Stack direction="column" spacing={4}>
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
+                <Stack direction="column" spacing={4}>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormInput type="text" placeholder="Name (optional)" {...field} />
+                    )}
+                  />
 
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormInput type="email" placeholder="Email" {...field} />
+                    )}
+                  />
 
-                <Input
-                  type="password"
-                  placeholder="Password (min 6 characters)"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormInput
+                        type="password"
+                        placeholder="Password (min 6 characters)"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Stack>
+
+                <Button
+                  type="submit"
+                  loading={isPending}
+                  loadingText="Creating account..."
+                  className="w-full"
+                >
+                  Sign up
+                </Button>
               </Stack>
-
-              {error && (
-                <Typography variant="body2" className="text-destructive">
-                  {error.message}
-                </Typography>
-              )}
-
-              <Button
-                type="submit"
-                loading={isPending}
-                loadingText="Creating account..."
-                className="w-full"
-              >
-                Sign up
-              </Button>
-            </Stack>
-          </form>
+            </form>
+          </Form>
 
           <Typography variant="body2" className="text-center text-muted-foreground">
             Already have an account?{" "}

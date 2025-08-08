@@ -1,5 +1,3 @@
-"use client";
-
 import bcrypt from "bcrypt";
 
 export async function hashPassword(password: string) {

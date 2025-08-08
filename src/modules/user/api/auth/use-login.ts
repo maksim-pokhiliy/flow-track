@@ -1,13 +1,9 @@
-"use client";
-
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
-type LoginInput = {
-  email: string;
-  password: string;
-};
+import type { LoginInput } from "../../model";
 
 export function useLogin() {
   const router = useRouter();
@@ -27,7 +23,11 @@ export function useLogin() {
       return result;
     },
     onSuccess: () => {
+      toast.success("Welcome back!");
       router.refresh();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 }

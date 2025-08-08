@@ -1,16 +1,11 @@
-"use client";
-
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 import { apiClient } from "@app/shared/api/api-client";
 
-type RegisterInput = {
-  email: string;
-  password: string;
-  name: string;
-};
+import type { RegisterInput } from "../../model";
 
 type RegisterResponse = {
   id: string;
@@ -35,6 +30,8 @@ export function useRegister() {
       return response.data;
     },
     onSuccess: async (_, variables) => {
+      toast.success("Account created successfully!");
+
       const signInResult = await signIn("credentials", {
         email: variables.email,
         password: variables.password,
@@ -43,7 +40,12 @@ export function useRegister() {
 
       if (signInResult?.ok) {
         router.refresh();
+      } else {
+        toast.error("Account created but login failed. Please try logging in.");
       }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 }

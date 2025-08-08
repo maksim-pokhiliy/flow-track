@@ -18,7 +18,7 @@ import { useLogin } from "../api";
 import { type LoginInput, loginSchema } from "../model";
 
 export function LoginForm() {
-  const { mutate: login, isPending, error } = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -37,7 +37,9 @@ export function LoginForm() {
       <Container maxWidth="sm" className="w-full">
         <Stack direction="column" spacing={8}>
           <Stack direction="column" spacing={2} align="center">
-            <Typography variant="h3">Sign in</Typography>
+            <Typography className="text-center" variant="h3">
+              Sign in
+            </Typography>
 
             <Typography variant="body2" className="text-muted-foreground text-center">
               Enter your email and password to continue
@@ -64,12 +66,6 @@ export function LoginForm() {
                     )}
                   />
                 </Stack>
-
-                {error && (
-                  <Typography variant="body2" className="text-destructive">
-                    {error.message}
-                  </Typography>
-                )}
 
                 <Button
                   type="submit"
