@@ -1,3 +1,5 @@
+"use client";
+
 export function DashboardHeader() {
   return (
     <header className="border-b border-default">

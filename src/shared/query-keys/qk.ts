@@ -1,3 +1,5 @@
+"use client";
+
 export const qk = {
   workspaces: (wsId?: string) =>
     wsId ? (["workspaces", wsId] as const) : (["workspaces"] as const),

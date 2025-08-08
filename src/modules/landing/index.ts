@@ -1,1 +1,3 @@
-export { LandingPage } from "./ui/landing-page";
+"use client";
+
+export * from "./ui";
