@@ -1,4 +1,4 @@
-import { type ElementType } from "react";
+import { type ElementType, forwardRef, type ReactNode } from "react";
 
 import { cn } from "@app/shared/lib";
 
@@ -35,15 +35,24 @@ const map: Record<Variant, MapItem> = {
   button: { tag: "span", cls: "text-sm font-medium" },
 };
 
-type TypographyProps = React.PropsWithChildren<{
+type TypographyProps = {
   variant?: Variant;
   className?: string;
   as?: ElementType;
-}>;
+  children?: ReactNode;
+};
 
-export function Typography({ variant = "body1", className, as, children }: TypographyProps) {
-  const item = map[variant];
-  const Tag = (as ?? item.tag) as ElementType;
+export const Typography = forwardRef<HTMLElement, TypographyProps>(
+  ({ variant = "body1", className, as, children }, ref) => {
+    const item = map[variant];
+    const Tag = (as ?? item.tag) as ElementType;
 
-  return <Tag className={cn(item.cls, className)}>{children}</Tag>;
-}
+    return (
+      <Tag ref={ref} className={cn(item.cls, className)}>
+        {children}
+      </Tag>
+    );
+  },
+);
+
+Typography.displayName = "Typography";

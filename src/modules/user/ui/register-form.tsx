@@ -1,59 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 import { Button, Container, Input, Stack, Typography } from "@app/components/ui";
 
+import { useRegister } from "../api";
+
 export function RegisterForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const { mutate: register, isPending, error } = useRegister();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error?.message ?? "Registration failed");
-        setLoading(false);
-
-        return;
-      }
-
-      const signInResult = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (signInResult?.error) {
-        setError("Registration successful, but login failed. Please try logging in.");
-        setLoading(false);
-
-        return;
-      }
-
-      router.push("/workspaces");
-    } catch {
-      setError("Something went wrong. Please try again.");
-      setLoading(false);
-    }
+    register({ email, password, name });
   };
 
   return (
@@ -93,13 +56,13 @@ export function RegisterForm() {
 
               {error && (
                 <Typography variant="body2" className="text-destructive">
-                  {error}
+                  {error.message}
                 </Typography>
               )}
 
               <Button
                 type="submit"
-                loading={loading}
+                loading={isPending}
                 loadingText="Creating account..."
                 className="w-full"
               >

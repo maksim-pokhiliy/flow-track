@@ -53,6 +53,8 @@ const eslintConfig = [
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-non-null-assertion": "warn",
 
+      curly: ["error", "all"],
+
       // Import/Export rules
       "simple-import-sort/imports": [
         "error",

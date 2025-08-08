@@ -6,7 +6,7 @@ import { Stack } from "../../ui";
 
 export function AuthButtons() {
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} className="hidden md:flex">
       <Button variant="ghost" size="sm" asChild>
         <Link href="/login">Log in</Link>
       </Button>
