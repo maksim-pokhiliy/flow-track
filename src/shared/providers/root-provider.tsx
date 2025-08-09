@@ -30,7 +30,7 @@ export function RootProvider({ children }: RootProviderProps) {
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
           {children}
-          <Toaster position="bottom-center" expand={false} closeButton duration={4000} />
+          <Toaster position="bottom-center" expand={false} duration={4000} />
         </QueryClientProvider>
       </SessionProvider>
     </ThemeProvider>
