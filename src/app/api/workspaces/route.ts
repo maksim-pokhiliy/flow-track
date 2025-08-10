@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-import { requireUserId } from "@app/modules/auth/server/auth";
-import { createWorkspaceSchema } from "@app/modules/workspaces/model/workspace.model";
+import { requireUserId } from "@app/modules/auth";
 import {
   createWorkspace,
+  createWorkspaceSchema,
   listWorkspacesForUser,
-} from "@app/modules/workspaces/server/workspace-service";
+} from "@app/modules/workspaces";
 import { toApiResponse } from "@app/shared/api/errors";
 
 export async function GET() {

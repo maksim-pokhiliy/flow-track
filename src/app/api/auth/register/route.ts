@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { registerSchema } from "@app/modules/auth/model";
-import { registerWithEmail } from "@app/modules/auth/server";
+import { registerSchema, registerWithEmail } from "@app/modules/auth";
 
 export async function POST(request: Request) {
   try {
