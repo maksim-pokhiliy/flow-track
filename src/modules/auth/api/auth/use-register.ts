@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
-import { apiClient } from "@app/shared/api/api-client";
+import { apiClient } from "@app/shared/api";
 
 import type { RegisterInput } from "../../model";
 
