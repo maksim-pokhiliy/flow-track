@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { apiClient } from "@app/shared/api";
 
-import type { RegisterInput } from "../../model";
+import type { RegisterInput } from "../model";
 
 type RegisterResponse = {
   id: string;

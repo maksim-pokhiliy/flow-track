@@ -1,0 +1,59 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
+import { Button, Form, FormField, FormInput, Stack } from "@app/components/ui";
+import {
+  type CreateWorkspaceInput,
+  createWorkspaceSchema,
+} from "@app/modules/workspaces/model/workspace.model";
+
+import { useCreateWorkspace } from "../api";
+
+export function CreateWorkspaceForm() {
+  const { mutate: createWs, isPending: isCreating } = useCreateWorkspace();
+
+  const form = useForm<CreateWorkspaceInput>({
+    resolver: zodResolver(createWorkspaceSchema),
+    defaultValues: { name: "" },
+  });
+
+  const onSubmit = (data: CreateWorkspaceInput) => {
+    createWs(
+      { name: data.name.trim() },
+      {
+        onSuccess: () => {
+          toast.success("Workspace created");
+          form.reset({ name: "" });
+        },
+        onError: (err: Error) => toast.error(err.message),
+      },
+    );
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Stack spacing={3} className="max-w-md">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormInput
+                placeholder="Workspace name"
+                {...field}
+                onChange={(e) => field.onChange(e.target.value)}
+              />
+            )}
+          />
+
+          <Button type="submit" loading={isCreating} loadingText="Creating...">
+            Create workspace
+          </Button>
+        </Stack>
+      </form>
+    </Form>
+  );
+}

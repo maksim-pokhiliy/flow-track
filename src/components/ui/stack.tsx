@@ -22,7 +22,7 @@ const directionClasses = {
   column: "flex-col",
   "row-reverse": "flex-row-reverse",
   "column-reverse": "flex-col-reverse",
-} as const;
+};
 
 const spacingClasses = {
   0: "gap-0",
@@ -35,7 +35,7 @@ const spacingClasses = {
   8: "gap-8",
   10: "gap-10",
   12: "gap-12",
-} as const;
+};
 
 const alignClasses = {
   start: "items-start",
@@ -43,7 +43,7 @@ const alignClasses = {
   end: "items-end",
   stretch: "items-stretch",
   baseline: "items-baseline",
-} as const;
+};
 
 const justifyClasses = {
   start: "justify-start",
@@ -52,7 +52,7 @@ const justifyClasses = {
   between: "justify-between",
   around: "justify-around",
   evenly: "justify-evenly",
-} as const;
+};
 
 export function Stack<T extends ElementType = "div">({
   as,
