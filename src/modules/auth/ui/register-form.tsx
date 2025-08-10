@@ -34,10 +34,10 @@ export function RegisterForm() {
   };
 
   return (
-    <Stack direction="column" align="center" justify="center" className="min-h-screen">
-      <Container maxWidth="sm" className="w-full">
-        <Stack direction="column" spacing={8}>
-          <Stack direction="column" spacing={2} align="center">
+    <Container maxWidth="sm" className="w-full h-full">
+      <Stack justify="center" className="h-full">
+        <Stack spacing={8}>
+          <Stack spacing={2} align="center">
             <Typography className="text-center" variant="h3">
               Create account
             </Typography>
@@ -49,8 +49,8 @@ export function RegisterForm() {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <Stack direction="column" spacing={4}>
-                <Stack direction="column" spacing={4}>
+              <Stack spacing={4}>
+                <Stack spacing={4}>
                   <FormField
                     control={form.control}
                     name="name"
@@ -99,7 +99,7 @@ export function RegisterForm() {
             </Link>
           </Typography>
         </Stack>
-      </Container>
-    </Stack>
+      </Stack>
+    </Container>
   );
 }

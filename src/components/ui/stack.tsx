@@ -58,7 +58,7 @@ export function Stack<T extends ElementType = "div">({
   as,
   children,
   className,
-  direction = "row",
+  direction = "column",
   spacing = 0,
   align = "stretch",
   justify = "start",

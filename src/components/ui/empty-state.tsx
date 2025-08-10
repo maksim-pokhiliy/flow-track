@@ -10,7 +10,7 @@ type EmptyStateProps = {
 
 export function EmptyState({ title = "Nothing here yet", description, action }: EmptyStateProps) {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
 

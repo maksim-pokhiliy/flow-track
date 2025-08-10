@@ -1,6 +1,5 @@
 "use client";
 
-import { Role } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@app/shared/api";
@@ -10,10 +9,10 @@ export type WorkspaceListItem = {
   id: string;
   name: string;
   createdAt: string;
-  role: Role;
+  role: "OWNER" | "ADMIN" | "MEMBER";
 };
 
-type ListResponse = { data: WorkspaceListItem[] };
+type ListResponse = WorkspaceListItem[];
 
 export function useWorkspaces() {
   return useQuery({
@@ -25,11 +24,7 @@ export function useWorkspaces() {
         throw new Error(res.error.message);
       }
 
-      if (!res.data) {
-        throw new Error("Empty response");
-      }
-
-      return res.data.data;
+      return res.data ?? [];
     },
   });
 }
