@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@app/components/ui/dialog";
-import { type UpdateWorkspaceInput, updateWorkspaceSchema } from "@app/modules/workspaces";
+import { type UpdateWorkspaceInput, updateWorkspaceSchema } from "@app/modules/workspaces/model";
 
 type Props = {
   open: boolean;

@@ -66,6 +66,12 @@ export class InvalidInputError extends AppError {
   }
 }
 
+export class ValidationError extends AppError {
+  constructor(message = "Validation error", details?: unknown) {
+    super(ERROR_CODES.VALIDATION_ERROR, message, details);
+  }
+}
+
 export function toApiResponse(e: unknown): NextResponse {
   if (e instanceof ZodError) {
     return NextResponse.json(

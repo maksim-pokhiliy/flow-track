@@ -1,6 +1,6 @@
 import { Role } from "@prisma/client";
 
-import { ForbiddenError, InvalidInputError, NotFoundError } from "@app/shared/api/errors";
+import { ForbiddenError, InvalidInputError, NotFoundError } from "@app/shared/api";
 import { prisma } from "@app/shared/lib";
 
 export async function listWorkspacesForUser(userId: string) {
