@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Typography } from "@app/components/ui/typography";
+import { Typography } from "@app/components/ui";
 import { cn } from "@app/shared/lib";
 
 import { useFormField } from "./form-context";

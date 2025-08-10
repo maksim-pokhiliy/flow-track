@@ -150,12 +150,3 @@ export function GET() {
 2. Set all environment variables for **Development**, **Preview**, and **Production**.
 3. Trigger a new deployment (push to main or “Deploy”).
 4. Set `NEXTAUTH_URL` to your Vercel domain in each environment.
-
----
-
-## Roadmap (current stage)
-
-- **M0 — Environment & Base** ✅
-- **M1 — Auth & Workspaces** (in progress)
-
----

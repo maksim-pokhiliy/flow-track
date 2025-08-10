@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
-import type { LoginInput } from "../../model";
+import { LoginInput } from "../model";
 
 export function useLogin() {
   const router = useRouter();

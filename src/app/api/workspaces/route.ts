@@ -1,0 +1,33 @@
+import { NextResponse } from "next/server";
+
+import { requireUserId } from "@app/modules/auth/server/auth";
+import { createWorkspaceSchema } from "@app/modules/workspaces/model/workspace.model";
+import {
+  createWorkspace,
+  listWorkspacesForUser,
+} from "@app/modules/workspaces/server/workspace-service";
+import { toApiResponse } from "@app/shared/api/errors";
+
+export async function GET() {
+  try {
+    const userId = await requireUserId();
+    const data = await listWorkspacesForUser(userId);
+
+    return NextResponse.json({ data });
+  } catch (e: unknown) {
+    return toApiResponse(e);
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const userId = await requireUserId();
+    const body = await req.json();
+    const { name } = createWorkspaceSchema.parse(body);
+    const ws = await createWorkspace(userId, name);
+
+    return NextResponse.json({ data: ws, invalidate: ["workspaces"] }, { status: 201 });
+  } catch (e: unknown) {
+    return toApiResponse(e);
+  }
+}

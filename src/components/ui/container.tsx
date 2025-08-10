@@ -21,7 +21,7 @@ const maxWidthClasses = {
   xl: "max-w-6xl",
   "2xl": "max-w-7xl",
   full: "max-w-full",
-} as const;
+};
 
 export function Container<T extends ElementType = "div">({
   as,
