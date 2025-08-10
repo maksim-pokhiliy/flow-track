@@ -1,4 +1,4 @@
-import { LoginForm } from "@app/modules/user/ui";
+import { LoginForm } from "@app/modules/auth/ui";
 
 export const metadata = {
   title: "Login",
