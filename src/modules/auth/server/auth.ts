@@ -2,7 +2,7 @@ import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { validateUserCredentials } from "@app/modules/auth";
-import { UnauthorizedError } from "@app/shared/api/errors";
+import { UnauthorizedError } from "@app/shared/api";
 
 export const authOptions: NextAuthOptions = {
   providers: [

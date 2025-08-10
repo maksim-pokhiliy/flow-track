@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { requireUserId } from "@app/modules/auth";
 import { deleteWorkspace, updateWorkspace, updateWorkspaceSchema } from "@app/modules/workspaces";
-import { toApiResponse } from "@app/shared/api/errors";
+import { toApiResponse } from "@app/shared/api";
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   try {

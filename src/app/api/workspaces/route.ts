@@ -6,7 +6,7 @@ import {
   createWorkspaceSchema,
   listWorkspacesForUser,
 } from "@app/modules/workspaces";
-import { toApiResponse } from "@app/shared/api/errors";
+import { toApiResponse } from "@app/shared/api";
 
 export async function GET() {
   try {
