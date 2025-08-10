@@ -11,6 +11,7 @@ const PROTECTED_API_PREFIXES = [
   "/api/timer",
   "/api/analytics",
   "/api/invoices",
+  "/api/invitations",
 ] as const;
 
 function startsWithAny(pathname: string, prefixes: readonly string[]) {

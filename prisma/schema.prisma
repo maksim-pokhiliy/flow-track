@@ -34,6 +34,7 @@ model Workspace {
   rates       Rate[]
   invoices    Invoice[]
   TimeEntry   TimeEntry[]
+  Invitation  Invitation[]
 }
 
 model Membership {
@@ -167,4 +168,29 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+model Invitation {
+  id          String           @id @default(cuid())
+  workspaceId String
+  email       String
+  role        Role
+  token       String           @unique
+  status      InvitationStatus @default(PENDING)
+  invitedBy   String?
+  expiresAt   DateTime
+  createdAt   DateTime         @default(now())
+  acceptedAt  DateTime?
+  revokedAt   DateTime?
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, email])
 }
