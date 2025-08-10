@@ -13,6 +13,7 @@ export function WorkspacesPage() {
   return (
     <QueryWrapper
       isLoading={isLoading}
+      loadingText="Loading workspaces..."
       error={isError ? (error as Error) : null}
       data={data}
       isEmpty={(arr) => arr.length === 0}

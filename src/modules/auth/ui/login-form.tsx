@@ -33,7 +33,7 @@ export function LoginForm() {
   };
 
   return (
-    <Container maxWidth="sm" className="w-full h-full">
+    <Container maxWidth="sm" className="w-full min-h-full">
       <Stack justify="center" className="h-full">
         <Stack spacing={8}>
           <Stack spacing={2} align="center">

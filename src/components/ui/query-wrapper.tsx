@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 
 import { ContentSection } from "./content-section";
 import { Stack } from "./stack";
@@ -8,6 +8,7 @@ import { Typography } from "./typography";
 
 type QueryWrapperProps<T> = {
   isLoading: boolean;
+  loadingText?: string;
   error: unknown | null;
   data: T | undefined;
   children: (data: T) => React.ReactNode;
@@ -17,6 +18,7 @@ type QueryWrapperProps<T> = {
 
 export function QueryWrapper<T>({
   isLoading,
+  loadingText,
   error,
   data,
   children,
@@ -27,9 +29,11 @@ export function QueryWrapper<T>({
     return (
       <ContentSection>
         <Stack align="center" justify="center" spacing={2} direction="row">
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader className="animate-spin" />
 
-          <Typography>Loading...</Typography>
+          <Typography variant="h4" className="font-normal">
+            {loadingText ?? "Loading..."}
+          </Typography>
         </Stack>
       </ContentSection>
     );
