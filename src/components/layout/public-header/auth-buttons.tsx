@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 
-import { Button } from "@app/components/ui/button";
-
-import { Stack } from "../../ui";
+import { Button, Stack } from "@app/components/ui";
 
 export function AuthButtons() {
   return (

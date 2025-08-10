@@ -1,20 +1,20 @@
 "use client";
 
+import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import { Stack } from "@app/components/ui";
-import { Button } from "@app/components/ui/button";
-import { Separator } from "@app/components/ui/separator";
 import {
+  Button,
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@app/components/ui/sheet";
+  Stack,
+} from "@app/components/ui";
 import { cn } from "@app/shared/lib";
 
 import { navItems } from "./nav-items";

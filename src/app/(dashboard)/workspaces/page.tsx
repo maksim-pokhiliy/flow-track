@@ -1,3 +1,5 @@
-export default function WorkspacesPage() {
-  return <div className="p-8">Workspaces (stub)</div>;
-}
+export { WorkspacesPage as default } from "@app/modules/workspaces";
+
+export const metadata = {
+  title: "Workspaces",
+};

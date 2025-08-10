@@ -1,7 +1,6 @@
 "use client";
 
-import { Container } from "@app/components/ui";
-import { Typography } from "@app/components/ui/typography";
+import { Container, Typography } from "@app/components/ui";
 
 export function LandingPage() {
   return (
