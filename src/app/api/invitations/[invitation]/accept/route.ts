@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { acceptInvitation } from "@app/modules/workspaces";
+import { acceptInvitation } from "@app/modules/workspaces/server";
 import { toApiResponse } from "@app/shared/api/errors";
 
-export async function POST(_req: Request, ctx: { params: Promise<{ token: string }> }) {
+export async function POST(_req: Request, ctx: { params: Promise<{ invitation: string }> }) {
   try {
-    const { token } = await ctx.params;
-    const result = await acceptInvitation(token);
+    const { invitation } = await ctx.params;
+    const result = await acceptInvitation(invitation);
 
     return NextResponse.json({ data: result, invalidate: ["invitations", "workspaces"] });
   } catch (e: unknown) {

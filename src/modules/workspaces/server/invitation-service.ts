@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 
 import { Role } from "@prisma/client";
 
-import { requireUserId } from "@app/modules/auth";
+import { requireUserId } from "@app/modules/auth/server";
 import { ForbiddenError, NotFoundError, ValidationError } from "@app/shared/api";
 import { prisma } from "@app/shared/lib";
 
