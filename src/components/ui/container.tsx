@@ -27,7 +27,7 @@ export function Container<T extends ElementType = "div">({
   as,
   children,
   className,
-  maxWidth = "lg",
+  maxWidth = "xl",
   fixed = false,
   disableGutters = false,
 }: ContainerProps<T>) {

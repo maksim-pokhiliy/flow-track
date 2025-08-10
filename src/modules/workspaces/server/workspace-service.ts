@@ -1,62 +1,95 @@
 import { Role } from "@prisma/client";
 
-import { ForbiddenError } from "@app/shared/api/errors";
+import { ForbiddenError, InvalidInputError, NotFoundError } from "@app/shared/api/errors";
 import { prisma } from "@app/shared/lib";
-
-async function getUserRole(userId: string, workspaceId: string): Promise<Role | null> {
-  const m = await prisma.membership.findUnique({
-    where: { userId_workspaceId: { userId, workspaceId } },
-    select: { role: true },
-  });
-
-  return m?.role ?? null;
-}
 
 export async function listWorkspacesForUser(userId: string) {
   const memberships = await prisma.membership.findMany({
     where: { userId },
-    select: { role: true, workspace: { select: { id: true, name: true, createdAt: true } } },
-    orderBy: { workspace: { createdAt: "asc" } },
+    include: {
+      workspace: true,
+    },
+    orderBy: { workspace: { createdAt: "desc" } },
   });
 
   return memberships.map((m) => ({
     id: m.workspace.id,
     name: m.workspace.name,
+    createdAt: m.workspace.createdAt.toISOString(),
     role: m.role,
-    createdAt: m.workspace.createdAt,
   }));
 }
 
 export async function createWorkspace(userId: string, name: string) {
-  const ws = await prisma.workspace.create({ data: { name } });
+  if (!name.trim()) {
+    throw new InvalidInputError("Name is required");
+  }
 
-  await prisma.membership.create({
-    data: { userId, workspaceId: ws.id, role: "OWNER" },
+  const ws = await prisma.$transaction(async (tx) => {
+    const workspace = await tx.workspace.create({
+      data: { name },
+    });
+
+    await tx.membership.create({
+      data: { userId, workspaceId: workspace.id, role: Role.OWNER },
+    });
+
+    await tx.project.create({
+      data: { workspaceId: workspace.id, name: "General" },
+    });
+
+    return workspace;
   });
 
-  await prisma.project.create({
-    data: { workspaceId: ws.id, name: "General", isArchived: false },
-  });
-
-  return ws;
+  return {
+    id: ws.id,
+    name: ws.name,
+    createdAt: ws.createdAt.toISOString(),
+  };
 }
 
 export async function updateWorkspace(userId: string, workspaceId: string, name: string) {
-  const role = await getUserRole(userId, workspaceId);
-
-  if (!role || (role !== "OWNER" && role !== "ADMIN")) {
-    throw new ForbiddenError("Only OWNER or ADMIN can update workspace");
+  if (!name.trim()) {
+    throw new InvalidInputError("Name is required");
   }
 
-  return prisma.workspace.update({ where: { id: workspaceId }, data: { name } });
+  await assertOwner(userId, workspaceId);
+
+  const ws = await prisma.workspace.update({
+    where: { id: workspaceId },
+    data: { name },
+  });
+
+  return {
+    id: ws.id,
+    name: ws.name,
+    createdAt: ws.createdAt.toISOString(),
+  };
 }
 
 export async function deleteWorkspace(userId: string, workspaceId: string) {
-  const role = await getUserRole(userId, workspaceId);
+  await assertOwner(userId, workspaceId);
 
-  if (role !== "OWNER") {
-    throw new ForbiddenError("Only OWNER can delete workspace");
+  try {
+    const ws = await prisma.workspace.delete({ where: { id: workspaceId } });
+
+    return { id: ws.id };
+  } catch {
+    throw new NotFoundError("Workspace not found");
+  }
+}
+
+async function assertOwner(userId: string, workspaceId: string) {
+  const m = await prisma.membership.findUnique({
+    where: { userId_workspaceId: { userId, workspaceId } },
+    select: { role: true },
+  });
+
+  if (!m) {
+    throw new ForbiddenError("Not a workspace member");
   }
 
-  return prisma.workspace.delete({ where: { id: workspaceId } });
+  if (m.role !== Role.OWNER) {
+    throw new ForbiddenError("Only OWNER can perform this action");
+  }
 }

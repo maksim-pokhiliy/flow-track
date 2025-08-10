@@ -68,7 +68,7 @@ export function RenameWorkspaceDialog({
               submit();
             }}
           >
-            <Stack direction="column" spacing={3}>
+            <Stack spacing={4}>
               <FormField
                 control={form.control}
                 name="name"
