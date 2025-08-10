@@ -1,3 +1,3 @@
-export { LandingPage as default } from "@app/modules/landing";
+export { LandingPage as default } from "@app/modules/landing/ui";
 
 export const metadata = {};
