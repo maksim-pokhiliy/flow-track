@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { validateUserCredentials } from "@app/modules/user/server";
+import { validateUserCredentials } from "@app/modules/auth/server";
 
 const handler = NextAuth({
   providers: [
