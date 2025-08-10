@@ -12,7 +12,7 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <Stack className="hidden md:flex" as="nav" spacing={6} align="center">
+    <Stack className="hidden md:flex" as="nav" spacing={6} align="center" direction="row">
       {navItems.map((item) => (
         <Link
           key={item.href}

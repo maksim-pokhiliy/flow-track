@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { apiClient } from "@app/shared/api";
 import { qk } from "@app/shared/query-keys";
@@ -35,6 +36,8 @@ export function useCreateWorkspace() {
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: qk.workspaces() });
+      toast.success("Workspace created");
     },
+    onError: (err: Error) => toast.error(err.message),
   });
 }

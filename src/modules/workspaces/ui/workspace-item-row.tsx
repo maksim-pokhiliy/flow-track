@@ -17,15 +17,15 @@ export function WorkspaceItemRow({ workspace, onRename, onDelete, isUpdating, is
 
   return (
     <li className="flex items-center justify-between p-4">
-      <div>
-        <Typography className="font-medium">{workspace.name}</Typography>
+      <Stack spacing={2}>
+        <Typography variant="h4">{workspace.name}</Typography>
 
         <Typography variant="caption" className="text-muted-foreground">
           Role: {workspace.role}
         </Typography>
-      </div>
+      </Stack>
 
-      <Stack spacing={2} align="center">
+      <Stack spacing={4} align="center" direction="row">
         <Button variant="outline" size="sm" onClick={onRename} disabled={isUpdating}>
           Rename
         </Button>

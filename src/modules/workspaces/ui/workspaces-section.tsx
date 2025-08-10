@@ -3,17 +3,18 @@
 import { useState } from "react";
 
 import { Stack, Typography } from "@app/components/ui";
-import { EmptyState } from "@app/components/ui/empty-state";
-import { QueryWrapper } from "@app/components/ui/query-wrapper";
 
-import { useDeleteWorkspace, useUpdateWorkspace, useWorkspaces } from "../api";
+import { useDeleteWorkspace, useUpdateWorkspace, WorkspaceListItem } from "../api";
 
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
 import { RenameWorkspaceDialog } from "./rename-workspace-dialog";
 import { WorkspaceItemRow } from "./workspace-item-row";
 
-export function WorkspacesSection() {
-  const { data, isLoading, isError, error } = useWorkspaces();
+type WorkspacesSectionProps = {
+  workspaces: WorkspaceListItem[];
+};
+
+export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
   const { mutate: updateWs, isPending: isUpdating } = useUpdateWorkspace();
   const { mutate: deleteWs, isPending: isDeleting } = useDeleteWorkspace();
 
@@ -48,37 +49,22 @@ export function WorkspacesSection() {
 
   return (
     <>
-      <QueryWrapper
-        isLoading={isLoading}
-        error={isError ? (error as Error) : null}
-        data={data}
-        isEmpty={(arr) => arr.length === 0}
-        renderEmpty={
-          <EmptyState
-            title="No workspaces yet."
-            description="Create your first workspace to get started."
-          />
-        }
-      >
-        {(items) => (
-          <Stack direction="column" spacing={4}>
-            <Typography variant="h4">Your workspaces</Typography>
+      <Stack spacing={4}>
+        <Typography variant="h3">Your workspaces</Typography>
 
-            <ul className="divide-y rounded-lg border">
-              {items.map((ws) => (
-                <WorkspaceItemRow
-                  key={ws.id}
-                  workspace={ws}
-                  onRename={() => openRename(ws.id, ws.name)}
-                  onDelete={() => openDelete(ws.id, ws.name)}
-                  isUpdating={isUpdating}
-                  isDeleting={isDeleting}
-                />
-              ))}
-            </ul>
-          </Stack>
-        )}
-      </QueryWrapper>
+        <ul className="divide-y rounded-lg border">
+          {workspaces.map((ws) => (
+            <WorkspaceItemRow
+              key={ws.id}
+              workspace={ws}
+              onRename={() => openRename(ws.id, ws.name)}
+              onDelete={() => openDelete(ws.id, ws.name)}
+              isUpdating={isUpdating}
+              isDeleting={isDeleting}
+            />
+          ))}
+        </ul>
+      </Stack>
 
       <RenameWorkspaceDialog
         open={renameOpen}

@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import { Button, Form, FormField, FormInput, Stack } from "@app/components/ui";
 import {
@@ -25,10 +24,8 @@ export function CreateWorkspaceForm() {
       { name: data.name.trim() },
       {
         onSuccess: () => {
-          toast.success("Workspace created");
           form.reset({ name: "" });
         },
-        onError: (err: Error) => toast.error(err.message),
       },
     );
   };
@@ -36,7 +33,7 @@ export function CreateWorkspaceForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Stack spacing={3} className="max-w-md">
+        <Stack spacing={4} direction="row">
           <FormField
             control={form.control}
             name="name"

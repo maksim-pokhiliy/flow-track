@@ -33,10 +33,10 @@ export function LoginForm() {
   };
 
   return (
-    <Stack direction="column" align="center" justify="center" className="min-h-screen">
-      <Container maxWidth="sm" className="w-full">
-        <Stack direction="column" spacing={8}>
-          <Stack direction="column" spacing={2} align="center">
+    <Container maxWidth="sm" className="w-full h-full">
+      <Stack justify="center" className="h-full">
+        <Stack spacing={8}>
+          <Stack spacing={2} align="center">
             <Typography className="text-center" variant="h3">
               Sign in
             </Typography>
@@ -48,8 +48,8 @@ export function LoginForm() {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <Stack direction="column" spacing={4}>
-                <Stack direction="column" spacing={4}>
+              <Stack spacing={4}>
+                <Stack spacing={4}>
                   <FormField
                     control={form.control}
                     name="email"
@@ -86,7 +86,7 @@ export function LoginForm() {
             </Link>
           </Typography>
         </Stack>
-      </Container>
-    </Stack>
+      </Stack>
+    </Container>
   );
 }

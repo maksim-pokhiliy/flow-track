@@ -36,8 +36,8 @@ export function MobileMenu() {
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
 
-        <Stack className="mt-6" direction="column" spacing={4}>
-          <Stack as="nav" direction="column" spacing={2}>
+        <Stack className="mt-6" spacing={4}>
+          <Stack as="nav" spacing={2}>
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -57,7 +57,7 @@ export function MobileMenu() {
 
           <Separator />
 
-          <Stack direction="column" spacing={4} className="px-3">
+          <Stack spacing={4} className="px-3">
             <Button variant="outline" asChild>
               <Link href="/login" onClick={() => setOpen(false)}>
                 Log in

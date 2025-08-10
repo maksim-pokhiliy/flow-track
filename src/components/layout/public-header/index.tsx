@@ -8,16 +8,16 @@ import { Navigation } from "./navigation";
 
 export function PublicHeader() {
   return (
-    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container>
-        <Stack className="h-14" align="center" justify="between">
-          <Stack spacing={12} align="center">
+        <Stack className="h-14" align="center" justify="between" direction="row">
+          <Stack spacing={12} align="center" direction="row">
             <Logo />
 
             <Navigation />
           </Stack>
 
-          <Stack align="center" spacing={4}>
+          <Stack align="center" spacing={4} direction="row">
             <AuthButtons />
 
             <MobileMenu />
