@@ -1,4 +1,4 @@
-export { WorkspacesPage as default } from "@app/modules/workspaces";
+export { WorkspacesPage as default } from "@app/modules/workspaces/ui";
 
 export const metadata = {
   title: "Workspaces",
