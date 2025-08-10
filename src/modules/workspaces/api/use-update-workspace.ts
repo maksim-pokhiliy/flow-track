@@ -21,7 +21,7 @@ export function useUpdateWorkspace() {
     mutationFn: async (input: { id: string; name: string }) => {
       const res = await apiClient<UpdateResponse>(`/api/workspaces/${input.id}`, {
         method: "PATCH",
-        body: JSON.stringify({ name: input.name }),
+        body: JSON.stringify({ ...input }),
       });
 
       if (res.error) {
