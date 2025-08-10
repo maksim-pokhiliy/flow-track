@@ -4,10 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Button, Form, FormField, FormInput, Stack } from "@app/components/ui";
-import {
-  type CreateWorkspaceInput,
-  createWorkspaceSchema,
-} from "@app/modules/workspaces/model/workspace.model";
+import { type CreateWorkspaceInput, createWorkspaceSchema } from "@app/modules/workspaces";
 
 import { useCreateWorkspace } from "../api";
 
