@@ -4,18 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
-import {
-  Button,
-  Container,
-  Form,
-  FormField,
-  FormInput,
-  Stack,
-  Typography,
-} from "@app/components/ui";
+import { Container, Stack } from "@app/components/layout";
+import { Button, Form, FormField, FormInput, Typography } from "@app/components/ui";
 
 import { useRegister } from "../api";
-import { type RegisterInput, registerSchema } from "../model";
+import { RegisterInput, registerSchema } from "../model";
 
 export function RegisterForm() {
   const { mutate: register, isPending } = useRegister();

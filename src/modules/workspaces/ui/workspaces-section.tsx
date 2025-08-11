@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { Stack, Typography } from "@app/components/ui";
+import { Stack } from "@app/components/layout";
+import { Typography } from "@app/components/ui";
 
 import { useDeleteWorkspace, useUpdateWorkspace, WorkspaceListItem } from "../api";
 

@@ -2,10 +2,8 @@
 
 import * as React from "react";
 
-import { Typography } from "@app/components/ui";
+import { Typography, useFormField } from "@app/components/ui";
 import { cn } from "@app/shared/lib";
-
-import { useFormField } from "./form-context";
 
 export const FormDescription = React.forwardRef<
   HTMLParagraphElement,

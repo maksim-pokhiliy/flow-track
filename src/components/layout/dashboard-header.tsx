@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Logo, Stack } from "../ui";
+import { Container, Logo, Stack } from "@app/components/layout";
 
 export function DashboardHeader() {
   return (

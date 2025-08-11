@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@app/components/ui";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@app/components/ui/dialog";
+} from "@app/components/ui";
 
 type Props = {
   open: boolean;

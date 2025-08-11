@@ -5,8 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { ReactNode, useState } from "react";
 
 import { Toaster } from "@app/components/ui";
-
-import { ThemeProvider } from "./theme-provider";
+import { ThemeProvider } from "@app/shared/providers";
 
 type RootProviderProps = {
   children: ReactNode;

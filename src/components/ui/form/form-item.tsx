@@ -2,9 +2,8 @@
 
 import * as React from "react";
 
+import { FormItemContext } from "@app/components/ui";
 import { cn } from "@app/shared/lib";
-
-import { FormItemContext } from "./form-context";
 
 export const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {

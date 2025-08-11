@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@app/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@app/components/ui";
 
 type EmptyStateProps = {
   title?: string;

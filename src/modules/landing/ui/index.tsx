@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentSection } from "@app/components/ui";
+import { ContentSection } from "@app/components/layout";
 
 export function LandingPage() {
   return (
