@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 
-import { Container } from "./container";
-import { Stack } from "./stack";
-import { Typography } from "./typography";
+import { Container, Stack } from "@app/components/layout";
+import { Typography } from "@app/components/ui";
 
 interface ContentSectionProps {
   title?: string;

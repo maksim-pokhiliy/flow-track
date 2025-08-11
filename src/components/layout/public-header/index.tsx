@@ -1,10 +1,9 @@
 "use client";
 
-import { Container, Logo, Stack } from "../../ui";
-
-import { AuthButtons } from "./auth-buttons";
-import { MobileMenu } from "./mobile-menu";
-import { Navigation } from "./navigation";
+import { Container, Logo, Stack } from "@app/components/layout";
+import { AuthButtons } from "@app/components/layout/public-header/auth-buttons";
+import { MobileMenu } from "@app/components/layout/public-header/mobile-menu";
+import { Navigation } from "@app/components/layout/public-header/navigation";
 
 export function PublicHeader() {
   return (

@@ -2,9 +2,8 @@
 
 import { Loader } from "lucide-react";
 
-import { ContentSection } from "./content-section";
-import { Stack } from "./stack";
-import { Typography } from "./typography";
+import { ContentSection, Stack } from "@app/components/layout";
+import { Typography } from "@app/components/ui/typography";
 
 type QueryWrapperProps<T> = {
   isLoading: boolean;

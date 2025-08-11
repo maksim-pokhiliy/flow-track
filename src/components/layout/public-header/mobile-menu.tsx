@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { Stack } from "@app/components/layout";
+import { navItems } from "@app/components/layout/public-header/nav-items";
 import {
   Button,
   Sheet,
@@ -13,11 +15,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  Stack,
 } from "@app/components/ui";
 import { cn } from "@app/shared/lib";
-
-import { navItems } from "./nav-items";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
