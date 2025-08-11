@@ -2,11 +2,7 @@
 
 import * as React from "react";
 
-import { Input } from "@app/components/ui";
-
-import { useFormField } from "./form-context";
-import { FormLabel } from "./form-label";
-import { FormDescription, FormMessage } from "./form-message";
+import { FormDescription, FormLabel, FormMessage, Input, useFormField } from "@app/components/ui";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,

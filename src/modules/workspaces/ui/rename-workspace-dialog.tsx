@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { Button, Form, FormField, FormInput, Stack } from "@app/components/ui";
+import { Stack } from "@app/components/layout";
+import { Button, Form, FormField, FormInput } from "@app/components/ui";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@app/components/ui/dialog";
-import { type UpdateWorkspaceInput, updateWorkspaceSchema } from "@app/modules/workspaces/model";
+
+import { UpdateWorkspaceInput, updateWorkspaceSchema } from "../model";
 
 type Props = {
   open: boolean;

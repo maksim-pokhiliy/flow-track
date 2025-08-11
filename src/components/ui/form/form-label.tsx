@@ -2,9 +2,8 @@
 
 import * as React from "react";
 
+import { useFormField } from "@app/components/ui";
 import { cn } from "@app/shared/lib";
-
-import { useFormField } from "./form-context";
 
 export const FormLabel = React.forwardRef<
   HTMLLabelElement,

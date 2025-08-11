@@ -3,10 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Button, Form, FormField, FormInput, Stack } from "@app/components/ui";
-import { type CreateWorkspaceInput, createWorkspaceSchema } from "@app/modules/workspaces/model";
+import { Stack } from "@app/components/layout";
+import { Button, Form, FormField, FormInput } from "@app/components/ui";
 
 import { useCreateWorkspace } from "../api";
+import { CreateWorkspaceInput, createWorkspaceSchema } from "../model";
 
 export function CreateWorkspaceForm() {
   const { mutate: createWs, isPending: isCreating } = useCreateWorkspace();

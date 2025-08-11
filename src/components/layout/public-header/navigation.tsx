@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Stack } from "@app/components/ui";
+import { Stack } from "@app/components/layout";
+import { navItems } from "@app/components/layout/public-header/nav-items";
 import { cn } from "@app/shared/lib";
-
-import { navItems } from "./nav-items";
 
 export function Navigation() {
   const pathname = usePathname();

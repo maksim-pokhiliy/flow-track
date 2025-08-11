@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Stack, Typography } from "@app/components/ui";
+import { Stack } from "@app/components/layout";
+import { Button, Typography } from "@app/components/ui";
 
-import type { WorkspaceListItem } from "../api/use-workspaces";
+import { WorkspaceListItem } from "../api";
 
 type Props = {
   workspace: WorkspaceListItem;
