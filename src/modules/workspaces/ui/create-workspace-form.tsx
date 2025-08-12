@@ -40,6 +40,7 @@ export function CreateWorkspaceForm() {
                 placeholder="Workspace name"
                 {...field}
                 onChange={(e) => field.onChange(e.target.value)}
+                disabled={isCreating}
               />
             )}
           />

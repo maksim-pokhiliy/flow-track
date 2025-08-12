@@ -1,23 +1,40 @@
 "use client";
 
+import { MoreHorizontal } from "lucide-react";
+
 import { Stack } from "@app/components/layout";
 import { Button, Typography } from "@app/components/ui";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@app/components/ui/dropdown-menu";
 
-import { WorkspaceListItem } from "../api";
+import type { WorkspaceListItem } from "../api";
 
 type Props = {
   workspace: WorkspaceListItem;
   onRename: () => void;
+  onInvite: () => void;
   onDelete: () => void;
   isUpdating: boolean;
   isDeleting: boolean;
 };
 
-export function WorkspaceItemRow({ workspace, onRename, onDelete, isUpdating, isDeleting }: Props) {
+export function WorkspaceItemRow({
+  workspace,
+  onRename,
+  onInvite,
+  onDelete,
+  isUpdating,
+  isDeleting,
+}: Props) {
   const isOwner = workspace.role === "OWNER";
 
   return (
-    <li className="flex items-center justify-between p-4">
+    <Stack direction="row" align="center" justify="between" className="p-4">
       <Stack spacing={2}>
         <Typography variant="h4">{workspace.name}</Typography>
 
@@ -26,22 +43,39 @@ export function WorkspaceItemRow({ workspace, onRename, onDelete, isUpdating, is
         </Typography>
       </Stack>
 
-      <Stack spacing={4} align="center" direction="row">
-        <Button variant="outline" size="sm" onClick={onRename} disabled={isUpdating}>
-          Rename
-        </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Actions"
+            disabled={isUpdating && !isOwner}
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
 
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={onDelete}
-          disabled={isDeleting || !isOwner}
-          aria-invalid={!isOwner}
-          title={!isOwner ? "Only OWNER can delete workspace" : undefined}
-        >
-          Delete
-        </Button>
-      </Stack>
-    </li>
+        <DropdownMenuContent align="end" sideOffset={6}>
+          <DropdownMenuItem onSelect={onRename}>Rename</DropdownMenuItem>
+          <DropdownMenuItem onSelect={onInvite}>Invite member</DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={() => {
+              if (isOwner) {
+                onDelete();
+              }
+            }}
+            disabled={isDeleting || !isOwner}
+            aria-disabled={isDeleting || !isOwner}
+            title={!isOwner ? "Only OWNER can delete workspace" : undefined}
+          >
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </Stack>
   );
 }
