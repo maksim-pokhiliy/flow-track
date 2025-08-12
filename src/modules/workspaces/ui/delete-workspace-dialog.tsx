@@ -31,7 +31,12 @@ export function DeleteWorkspaceDialog({ open, name, onOpenChange, onConfirm, loa
         </DialogHeader>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={loading}
+          >
             Cancel
           </Button>
 

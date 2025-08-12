@@ -8,6 +8,7 @@ import { Typography } from "@app/components/ui";
 import { useDeleteWorkspace, useUpdateWorkspace, WorkspaceListItem } from "../api";
 
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
+import { InviteWorkspaceDialog } from "./invite-workspace-dialog";
 import { RenameWorkspaceDialog } from "./rename-workspace-dialog";
 import { WorkspaceItemRow } from "./workspace-item-row";
 
@@ -27,6 +28,9 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteName, setDeleteName] = useState("");
 
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteWsId, setInviteWsId] = useState<string | null>(null);
+
   const openRename = (id: string, current: string) => {
     setRenameId(id);
     setRenameValue(current);
@@ -39,11 +43,20 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
     setDeleteOpen(true);
   };
 
+  const openInvite = (id: string) => {
+    setInviteWsId(id);
+    setInviteOpen(true);
+  };
+
   const closeDialogs = () => {
     setRenameOpen(false);
     setDeleteOpen(false);
+    setInviteOpen(false);
+
     setRenameId(null);
     setDeleteId(null);
+    setInviteWsId(null);
+
     setRenameValue("");
     setDeleteName("");
   };
@@ -55,14 +68,16 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
 
         <ul className="divide-y rounded-lg border">
           {workspaces.map((ws) => (
-            <WorkspaceItemRow
-              key={ws.id}
-              workspace={ws}
-              onRename={() => openRename(ws.id, ws.name)}
-              onDelete={() => openDelete(ws.id, ws.name)}
-              isUpdating={isUpdating}
-              isDeleting={isDeleting}
-            />
+            <li key={ws.id}>
+              <WorkspaceItemRow
+                workspace={ws}
+                onRename={() => openRename(ws.id, ws.name)}
+                onInvite={() => openInvite(ws.id)}
+                onDelete={() => openDelete(ws.id, ws.name)}
+                isUpdating={isUpdating}
+                isDeleting={isDeleting}
+              />
+            </li>
           ))}
         </ul>
       </Stack>
@@ -101,6 +116,14 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
         }}
         loading={isDeleting}
       />
+
+      {inviteWsId && (
+        <InviteWorkspaceDialog
+          open={inviteOpen}
+          workspaceId={inviteWsId}
+          onOpenChange={(v) => (v ? setInviteOpen(true) : closeDialogs())}
+        />
+      )}
     </>
   );
 }
