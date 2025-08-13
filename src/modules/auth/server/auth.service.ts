@@ -1,9 +1,9 @@
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { UnauthorizedError } from "@app/shared/api";
+import { AppError, ERROR_CODES } from "@app/shared/api";
 
-import { validateUserCredentials } from "./auth-service";
+import { validateUserCredentials } from "./validate-user-credentials.service";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -64,7 +64,7 @@ export async function requireUserId(): Promise<string> {
   const userId = session?.user?.id;
 
   if (!userId) {
-    throw new UnauthorizedError();
+    throw new AppError(ERROR_CODES.UNAUTHORIZED, "Auth required");
   }
 
   return userId;

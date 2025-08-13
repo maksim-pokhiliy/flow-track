@@ -1,96 +1,43 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const PUBLIC_AUTH_PAGES = ["/login", "/register"] as const;
-const PRIVATE_PAGES = ["/workspaces", "/projects", "/timer", "/analytics"] as const;
+const PUBLIC_ROUTES = ["/", "/login", "/register", "/pricing", "/invite"] as const;
 
-const PROTECTED_API_PREFIXES = [
-  "/api/workspaces",
-  "/api/projects",
-  "/api/tasks",
-  "/api/timer",
-  "/api/analytics",
-  "/api/invoices",
-  "/api/invitations",
-] as const;
+function isPublic(pathname: string): boolean {
+  for (const p of PUBLIC_ROUTES) {
+    if (pathname === p || pathname.startsWith(`${p}/`)) {
+      return true;
+    }
+  }
 
-function startsWithAny(pathname: string, prefixes: readonly string[]) {
-  return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  return false;
+}
+
+function safeInternalPath(path: string | null): string | null {
+  return path?.startsWith("/") ? path : null;
 }
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/static") ||
-    pathname.startsWith("/assets") ||
-    pathname === "/favicon.ico" ||
-    pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml"
-  ) {
-    return NextResponse.next();
+  if (!isPublic(pathname) && !token) {
+    const url = new URL("/login", req.url);
+
+    url.searchParams.set("callbackUrl", `${pathname}${search}`);
+
+    return NextResponse.redirect(url);
   }
 
-  const token = await getToken({ req });
+  if ((pathname === "/login" || pathname === "/register") && token) {
+    const target = safeInternalPath(req.nextUrl.searchParams.get("callbackUrl")) ?? "/workspaces";
 
-  if (PUBLIC_AUTH_PAGES.includes(pathname as (typeof PUBLIC_AUTH_PAGES)[number])) {
-    if (token) {
-      const url = req.nextUrl.clone();
-
-      url.pathname = "/workspaces";
-      url.search = "";
-
-      return NextResponse.redirect(url);
-    }
-
-    return NextResponse.next();
-  }
-
-  if (startsWithAny(pathname, PRIVATE_PAGES)) {
-    if (!token) {
-      const url = req.nextUrl.clone();
-      const next = pathname + (search || "");
-
-      url.pathname = "/login";
-      url.search = `?next=${encodeURIComponent(next)}`;
-
-      return NextResponse.redirect(url);
-    }
-
-    return NextResponse.next();
-  }
-
-  if (pathname.startsWith("/api/")) {
-    if (pathname.startsWith("/api/auth")) {
-      return NextResponse.next();
-    }
-
-    if (startsWithAny(pathname, PROTECTED_API_PREFIXES)) {
-      if (!token) {
-        return NextResponse.json(
-          { error: { code: "UNAUTHORIZED", message: "Authentication required" } },
-          { status: 401 },
-        );
-      }
-    }
-
-    return NextResponse.next();
+    return NextResponse.redirect(new URL(target, req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/login",
-    "/register",
-
-    "/workspaces/:path*",
-    "/projects/:path*",
-    "/timer/:path*",
-    "/analytics/:path*",
-
-    "/api/:path*",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

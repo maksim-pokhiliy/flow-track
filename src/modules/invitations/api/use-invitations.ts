@@ -3,7 +3,7 @@
 import { InvitationStatus, Role } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { apiClient } from "@app/shared/api";
+import { apiClient, unwrap } from "@app/shared/api";
 import { qk } from "@app/shared/query-keys";
 
 export type InvitationListItem = {
@@ -18,18 +18,14 @@ export type InvitationListItem = {
 export function useInvitations(workspaceId: string) {
   return useQuery({
     queryKey: qk.invitations(workspaceId),
+    enabled: Boolean(workspaceId),
     queryFn: async () => {
       const res = await apiClient<InvitationListItem[]>(
-        `/api/invitations?workspaceId=${encodeURIComponent(workspaceId)}`,
+        `/api/workspaces/${encodeURIComponent(workspaceId)}/invitations`,
         { method: "GET" },
       );
 
-      if (res.error) {
-        throw new Error(res.error.message);
-      }
-
-      return res.data ?? [];
+      return unwrap(res);
     },
-    enabled: Boolean(workspaceId),
   });
 }

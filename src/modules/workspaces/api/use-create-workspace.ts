@@ -1,43 +1,32 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { apiClient } from "@app/shared/api";
-import { qk } from "@app/shared/query-keys";
+import { apiClient, unwrap } from "@app/shared/api";
 
-type CreatedWorkspace = {
+type WorkspaceDTO = {
   id: string;
   name: string;
   createdAt: string;
 };
 
-type CreateResponse = { data: CreatedWorkspace; invalidate?: readonly string[] };
-
 export function useCreateWorkspace() {
-  const qc = useQueryClient();
-
   return useMutation({
+    mutationKey: ["workspace:create"],
     mutationFn: async (input: { name: string }) => {
-      const res = await apiClient<CreateResponse>("/api/workspaces", {
+      const res = await apiClient<WorkspaceDTO>("/api/workspaces", {
         method: "POST",
         body: JSON.stringify(input),
       });
 
-      if (res.error) {
-        throw new Error(res.error.message);
-      }
-
-      if (!res.data) {
-        throw new Error("Empty response");
-      }
-
-      return res.data.data;
+      return unwrap(res);
     },
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: qk.workspaces() });
+    onSuccess: () => {
       toast.success("Workspace created");
     },
-    onError: (err: Error) => toast.error(err.message),
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
   });
 }

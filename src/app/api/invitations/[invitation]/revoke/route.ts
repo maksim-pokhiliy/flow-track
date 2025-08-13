@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { revokeInvitation } from "@app/modules/workspaces/server";
-import { toApiResponse } from "@app/shared/api/errors";
+import { revokeInvitation } from "@app/modules/invitations/server/revoke-invitation.service";
+import { toApiResponse } from "@app/shared/api";
 
 export async function POST(_req: Request, ctx: { params: Promise<{ invitation: string }> }) {
   try {

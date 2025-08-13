@@ -2,9 +2,10 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { Toaster } from "@app/components/ui";
+import { setQueryClientForInvalidation } from "@app/shared/api/interceptors/cache-invalidation";
 import { ThemeProvider } from "@app/shared/providers";
 
 type RootProviderProps = {
@@ -23,6 +24,10 @@ export function RootProvider({ children }: RootProviderProps) {
         },
       }),
   );
+
+  useEffect(() => {
+    setQueryClientForInvalidation(queryClient);
+  }, [queryClient]);
 
   return (
     <ThemeProvider>

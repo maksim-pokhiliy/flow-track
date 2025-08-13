@@ -1,13 +1,33 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+
+type SessionUser = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+};
+
+type SessionResponse = {
+  user?: SessionUser;
+  expires?: string;
+} | null;
 
 export function useCurrentUser() {
-  const { data: session, status } = useSession();
+  return useQuery({
+    queryKey: ["auth:session"],
+    queryFn: async () => {
+      const res = await fetch("/api/auth/session", { credentials: "same-origin" });
 
-  return {
-    user: session?.user,
-    isLoading: status === "loading",
-    isAuthenticated: status === "authenticated",
-  };
+      if (!res.ok) {
+        return null as SessionResponse;
+      }
+
+      const data = (await res.json()) as SessionResponse;
+
+      return data;
+    },
+    staleTime: 60_000,
+  });
 }
