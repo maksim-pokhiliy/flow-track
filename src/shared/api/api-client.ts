@@ -41,7 +41,6 @@ export async function apiClient<T>(input: string, init?: FetchOptions): Promise<
 
     return json;
   } catch (e) {
-    // Обработка сетевых ошибок
     if (e instanceof TypeError) {
       return {
         error: {
