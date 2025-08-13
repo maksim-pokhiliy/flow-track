@@ -12,7 +12,7 @@ export async function getPendingInvitationOrThrow(token: string) {
   }
 
   if (inv.status !== "PENDING") {
-    throw new AppError(ERROR_CODES.NOT_FOUND, "Invitation not found");
+    throw new AppError(ERROR_CODES.NOT_FOUND, "Invitation is no longer active");
   }
 
   if (isExpired(inv.expiresAt)) {
