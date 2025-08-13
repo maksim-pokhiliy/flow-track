@@ -1,9 +1,5 @@
 import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib";
-
-function isExpired(expiresAt: Date) {
-  return expiresAt < new Date();
-}
+import { isExpired, prisma } from "@app/shared/lib";
 
 export async function getPendingInvitationOrThrow(token: string) {
   const inv = await prisma.invitation.findUnique({
