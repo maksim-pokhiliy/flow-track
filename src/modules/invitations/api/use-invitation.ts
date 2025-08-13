@@ -3,7 +3,7 @@
 import { Invitation } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { apiClient } from "@app/shared/api";
+import { apiClient, unwrap } from "@app/shared/api";
 import { qk } from "@app/shared/query-keys";
 
 type GetInvitationResponse = {
@@ -15,9 +15,12 @@ export function useInvitation(token: string | null | undefined) {
     queryKey: qk.invitation(token ?? ""),
     enabled: Boolean(token),
     queryFn: async () => {
-      const res = await apiClient<GetInvitationResponse>(`/api/invitations/${encodeURIComponent(token ?? "")}`, {
-        method: "GET",
-      });
+      const res = await apiClient<GetInvitationResponse>(
+        `/api/invitations/${encodeURIComponent(token ?? "")}`,
+        {
+          method: "GET",
+        },
+      );
 
       if (res.error) {
         throw new Error(res.error.message ?? "Failed to load invitation");
