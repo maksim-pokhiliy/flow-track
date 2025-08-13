@@ -15,7 +15,7 @@ export function useInvitation(token: string | null | undefined) {
     queryKey: qk.invitation(token ?? ""),
     enabled: Boolean(token),
     queryFn: async () => {
-      const res = await apiClient<GetInvitationResponse>(`/api/invitations/${token}`, {
+      const res = await apiClient<GetInvitationResponse>(`/api/invitations/${encodeURIComponent(token ?? "")}`, {
         method: "GET",
       });
 
