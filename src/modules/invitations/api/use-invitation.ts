@@ -27,7 +27,7 @@ export function useInvitation(token: string | null | undefined) {
         throw new Error("Empty response");
       }
 
-      return res.data.data;
+      return unwrap(res);
     },
   });
 }
