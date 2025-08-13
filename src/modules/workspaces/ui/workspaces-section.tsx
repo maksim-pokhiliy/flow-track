@@ -112,7 +112,7 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
             return;
           }
 
-          deleteWs({ id: deleteId }, { onSuccess: closeDialogs });
+          deleteWs(deleteId, { onSuccess: closeDialogs });
         }}
         loading={isDeleting}
       />

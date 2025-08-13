@@ -1,36 +1,27 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { apiClient } from "@app/shared/api";
-import { qk } from "@app/shared/query-keys";
+import { apiClient, unwrap } from "@app/shared/api";
 
-type DeleteResponse = { data: { id: string }; invalidate?: readonly string[] };
+type DeleteResponse = { id: string };
 
 export function useDeleteWorkspace() {
-  const qc = useQueryClient();
-
   return useMutation({
-    mutationFn: async (input: { id: string }) => {
-      const res = await apiClient<DeleteResponse>(`/api/workspaces/${input.id}`, {
+    mutationKey: ["workspace:delete"],
+    mutationFn: async (id: string) => {
+      const res = await apiClient<DeleteResponse>(`/api/workspaces/${encodeURIComponent(id)}`, {
         method: "DELETE",
       });
 
-      if (res.error) {
-        throw new Error(res.error.message);
-      }
-
-      if (!res.data) {
-        throw new Error("Empty response");
-      }
-
-      return res.data.data;
+      return unwrap(res);
     },
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: qk.workspaces() });
+    onSuccess: () => {
       toast.success("Workspace deleted");
     },
-    onError: (err: Error) => toast.error(err.message),
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
   });
 }

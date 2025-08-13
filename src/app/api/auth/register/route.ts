@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { registerSchema } from "@app/modules/auth/model";
 import { registerWithEmail } from "@app/modules/auth/server";
+import { AppError, ERROR_CODES, toApiResponse } from "@app/shared/api";
 
 export async function POST(request: Request) {
   try {
@@ -20,40 +21,13 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          error: {
-            code: "VALIDATION_ERROR",
-            message: "Invalid input",
-            details: error.issues,
-          },
-        },
-        { status: 400 },
-      );
+      return toApiResponse(error);
     }
 
     if (error instanceof Error && error.message === "Email already in use") {
-      return NextResponse.json(
-        {
-          error: {
-            code: "EMAIL_EXISTS",
-            message: "Email already in use",
-          },
-        },
-        { status: 409 },
-      );
+      return toApiResponse(new AppError(ERROR_CODES.EMAIL_EXISTS, "Email already in use"));
     }
 
-    console.error("Registration error:", error);
-
-    return NextResponse.json(
-      {
-        error: {
-          code: "INTERNAL_ERROR",
-          message: "Registration failed",
-        },
-      },
-      { status: 500 },
-    );
+    return toApiResponse(error);
   }
 }

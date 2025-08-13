@@ -1,31 +1,72 @@
+import { runCacheInvalidation } from "./interceptors/cache-invalidation";
+import { AppError, ERROR_CODES, type ErrorCode } from "./errors";
+
 type FetchOptions = Omit<RequestInit, "headers"> & {
   headers?: Record<string, string>;
 };
 
-type ApiResponse<T> = {
+export type ApiError = {
+  code: ErrorCode;
+  message: string;
+  details?: unknown;
+};
+
+export type ApiResponse<T> = {
   data?: T;
-  error?: { code: string; message: string; details?: unknown };
-  invalidate?: string[];
+  error?: ApiError;
+  invalidate?: readonly string[];
 };
 
 export async function apiClient<T>(input: string, init?: FetchOptions): Promise<ApiResponse<T>> {
-  const res = await fetch(input, {
-    ...init,
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
-  });
+  try {
+    const res = await fetch(input, {
+      ...init,
+      headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    });
 
-  const json = (await res.json().catch(() => ({}))) as ApiResponse<T>;
+    const json = (await res.json().catch(() => ({}))) as ApiResponse<T>;
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return {
+        error:
+          json?.error ??
+          ({
+            code: ERROR_CODES.INTERNAL_ERROR,
+            message: `Request failed with ${res.status}`,
+          } as ApiError),
+      };
+    }
+
+    runCacheInvalidation(json.invalidate);
+
+    return json;
+  } catch (e) {
+    if (e instanceof TypeError) {
+      return {
+        error: {
+          code: ERROR_CODES.NETWORK_ERROR,
+          message: "Network error. Please check your connection.",
+        },
+      };
+    }
+
     return {
-      error:
-        json?.error ??
-        ({
-          code: "HTTP_ERROR",
-          message: `Request failed with ${res.status}`,
-        } as ApiResponse<T>["error"]),
+      error: {
+        code: ERROR_CODES.INTERNAL_ERROR,
+        message: "An unexpected error occurred",
+      },
     };
   }
+}
 
-  return json;
+export function unwrap<T>(res: ApiResponse<T>): T {
+  if (res.error) {
+    throw new AppError(res.error.code, res.error.message, res.error.details);
+  }
+
+  if (!res.data) {
+    throw new AppError(ERROR_CODES.INTERNAL_ERROR, "Empty response");
+  }
+
+  return res.data;
 }

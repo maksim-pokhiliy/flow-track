@@ -5,31 +5,35 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
-import { LoginInput } from "../model";
+type LoginInput = {
+  email: string;
+  password: string;
+};
 
 export function useLogin() {
   const router = useRouter();
 
   return useMutation({
+    mutationKey: ["auth:login"],
     mutationFn: async ({ email, password }: LoginInput) => {
-      const result = await signIn("credentials", {
+      const res = await signIn("credentials", {
+        redirect: false,
         email,
         password,
-        redirect: false,
       });
 
-      if (result?.error) {
-        throw new Error("Invalid email or password");
+      if (!res || res.error) {
+        throw new Error(res?.error ?? "Invalid email or password");
       }
 
-      return result;
+      return true;
     },
     onSuccess: () => {
-      toast.success("Welcome back!");
+      toast.success("Logged in");
       router.refresh();
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (err: Error) => {
+      toast.error(err.message);
     },
   });
 }

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
+import { createInvitation, listInvitations } from "@app/modules/invitations/server";
 import { inviteCreateSchema } from "@app/modules/workspaces/model";
-import { createInvitation, listInvitations } from "@app/modules/workspaces/server";
-import { toApiResponse } from "@app/shared/api/errors";
+import { toApiResponse } from "@app/shared/api";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   try {
