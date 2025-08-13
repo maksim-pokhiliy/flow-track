@@ -2,27 +2,46 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export const ERROR_CODES = {
+  // Auth & Access
   UNAUTHORIZED: "UNAUTHORIZED",
   FORBIDDEN: "FORBIDDEN",
+  TOKEN_EXPIRED: "TOKEN_EXPIRED",
+
+  // Resources
   NOT_FOUND: "NOT_FOUND",
   CONFLICT: "CONFLICT",
+  EMAIL_EXISTS: "EMAIL_EXISTS",
+
+  // Validation
   INVALID_INPUT: "INVALID_INPUT",
   VALIDATION_ERROR: "VALIDATION_ERROR",
+
+  // Business Logic
+  QUOTA_EXCEEDED: "QUOTA_EXCEEDED",
+  RATE_LIMITED: "RATE_LIMITED",
+  PAYMENT_REQUIRED: "PAYMENT_REQUIRED",
+
+  // System
   INTERNAL_ERROR: "INTERNAL_ERROR",
-  EMAIL_EXISTS: "EMAIL_EXISTS",
+  NETWORK_ERROR: "NETWORK_ERROR",
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 
 const statusByCode: Record<ErrorCode, number> = {
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  CONFLICT: 409,
-  INVALID_INPUT: 400,
-  VALIDATION_ERROR: 400,
-  INTERNAL_ERROR: 500,
-  EMAIL_EXISTS: 409,
+  [ERROR_CODES.UNAUTHORIZED]: 401,
+  [ERROR_CODES.FORBIDDEN]: 403,
+  [ERROR_CODES.NOT_FOUND]: 404,
+  [ERROR_CODES.CONFLICT]: 409,
+  [ERROR_CODES.INVALID_INPUT]: 400,
+  [ERROR_CODES.VALIDATION_ERROR]: 400,
+  [ERROR_CODES.INTERNAL_ERROR]: 500,
+  [ERROR_CODES.EMAIL_EXISTS]: 409,
+  [ERROR_CODES.TOKEN_EXPIRED]: 410,
+  [ERROR_CODES.QUOTA_EXCEEDED]: 402,
+  [ERROR_CODES.RATE_LIMITED]: 429,
+  [ERROR_CODES.PAYMENT_REQUIRED]: 402,
+  [ERROR_CODES.NETWORK_ERROR]: 0,
 };
 
 export class AppError extends Error {
@@ -36,49 +55,17 @@ export class AppError extends Error {
   }
 }
 
-export class UnauthorizedError extends AppError {
-  constructor(message = "Auth required") {
-    super(ERROR_CODES.UNAUTHORIZED, message);
-  }
-}
-
-export class ForbiddenError extends AppError {
-  constructor(message = "Forbidden") {
-    super(ERROR_CODES.FORBIDDEN, message);
-  }
-}
-
-export class NotFoundError extends AppError {
-  constructor(message = "Not found") {
-    super(ERROR_CODES.NOT_FOUND, message);
-  }
-}
-
-export class ConflictError extends AppError {
-  constructor(message = "Conflict") {
-    super(ERROR_CODES.CONFLICT, message);
-  }
-}
-
-export class InvalidInputError extends AppError {
-  constructor(message = "Invalid input", details?: unknown) {
-    super(ERROR_CODES.INVALID_INPUT, message, details);
-  }
-}
-
-export class ValidationError extends AppError {
-  constructor(message = "Validation error", details?: unknown) {
-    super(ERROR_CODES.VALIDATION_ERROR, message, details);
-  }
-}
-
 export function toApiResponse(e: unknown): NextResponse {
   if (e instanceof ZodError) {
     return NextResponse.json(
       {
-        error: { code: ERROR_CODES.VALIDATION_ERROR, message: "Invalid input", details: e.issues },
+        error: {
+          code: ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid input",
+          details: e.issues,
+        },
       },
-      { status: statusByCode.VALIDATION_ERROR },
+      { status: statusByCode[ERROR_CODES.VALIDATION_ERROR] },
     );
   }
 
@@ -95,6 +82,6 @@ export function toApiResponse(e: unknown): NextResponse {
 
   return NextResponse.json(
     { error: { code: ERROR_CODES.INTERNAL_ERROR, message: "Internal server error" } },
-    { status: statusByCode.INTERNAL_ERROR },
+    { status: statusByCode[ERROR_CODES.INTERNAL_ERROR] },
   );
 }

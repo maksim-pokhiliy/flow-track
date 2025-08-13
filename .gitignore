@@ -43,5 +43,6 @@ next-env.d.ts
 /src/generated/prisma
 scripts
 codebase.txt
+instructions.txt
 
 /src/generated/prisma

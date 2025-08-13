@@ -5,49 +5,34 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
-import { apiClient } from "@app/shared/api";
+import { apiClient, unwrap } from "@app/shared/api";
 
-import type { RegisterInput } from "../model";
-
-type RegisterResponse = {
-  id: string;
-  email: string;
-  name: string | null;
-};
+type RegisterInput = { name: string; email: string; password: string };
+type RegisteredUser = { id: string; name: string; email: string };
 
 export function useRegister() {
   const router = useRouter();
 
   return useMutation({
+    mutationKey: ["auth:register"],
     mutationFn: async (input: RegisterInput) => {
-      const response = await apiClient<RegisterResponse>("/api/auth/register", {
+      const res = await apiClient<RegisteredUser>("/api/auth/register", {
         method: "POST",
         body: JSON.stringify(input),
       });
 
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-
-      return response.data;
+      return unwrap(res);
     },
-    onSuccess: async (_, variables) => {
-      toast.success("Account created successfully!");
-
-      const signInResult = await signIn("credentials", {
-        email: variables.email,
-        password: variables.password,
+    onSuccess: async (_user, { email, password }) => {
+      await signIn("credentials", {
         redirect: false,
+        email,
+        password,
       });
 
-      if (signInResult?.ok) {
-        router.refresh();
-      } else {
-        toast.error("Account created but login failed. Please try logging in.");
-      }
+      toast.success("Account created");
+      router.refresh();
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
+    onError: (err: Error) => toast.error(err.message),
   });
 }

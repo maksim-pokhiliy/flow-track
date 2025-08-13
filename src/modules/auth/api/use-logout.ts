@@ -1,23 +1,22 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 
 export function useLogout() {
-  const router = useRouter();
-
   return useMutation({
+    mutationKey: ["auth:logout"],
     mutationFn: async () => {
-      await signOut({ redirect: false });
+      await signOut();
+
+      return true;
     },
     onSuccess: () => {
-      toast.success("Logged out successfully");
-      router.refresh();
+      toast.success("Logged out");
     },
-    onError: () => {
-      toast.error("Failed to log out");
+    onError: (err: Error) => {
+      toast.error(err.message);
     },
   });
 }

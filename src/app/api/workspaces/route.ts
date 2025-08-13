@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 
 import { requireUserId } from "@app/modules/auth/server";
 import { createWorkspaceSchema } from "@app/modules/workspaces/model";
-import { createWorkspace, listWorkspacesForUser } from "@app/modules/workspaces/server";
+import { createWorkspace, listWorkspaces } from "@app/modules/workspaces/server";
 import { toApiResponse } from "@app/shared/api";
 
 export async function GET() {
   try {
     const userId = await requireUserId();
-    const data = await listWorkspacesForUser(userId);
+    const data = await listWorkspaces(userId);
 
     return NextResponse.json({ data });
   } catch (e: unknown) {

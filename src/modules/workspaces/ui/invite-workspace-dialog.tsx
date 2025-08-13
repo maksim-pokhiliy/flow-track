@@ -14,7 +14,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@app/components/ui";
-import { useCreateInvitation } from "@app/modules/workspaces/api";
+import { useCreateInvitation } from "@app/modules/invitations/api";
 import { inviteFormSchema, type InviteFormValues } from "@app/modules/workspaces/model";
 
 type Props = {

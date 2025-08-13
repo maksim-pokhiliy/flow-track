@@ -1,43 +1,37 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { apiClient } from "@app/shared/api";
-import { qk } from "@app/shared/query-keys";
+import { apiClient, unwrap } from "@app/shared/api";
 
-type UpdatedWorkspace = {
+type WorkspaceDTO = {
   id: string;
   name: string;
   createdAt: string;
 };
 
-type UpdateResponse = { data: UpdatedWorkspace; invalidate?: readonly string[] };
+type UpdateInput = {
+  id: string;
+  name: string;
+};
 
 export function useUpdateWorkspace() {
-  const qc = useQueryClient();
-
   return useMutation({
-    mutationFn: async (input: { id: string; name: string }) => {
-      const res = await apiClient<UpdateResponse>(`/api/workspaces/${input.id}`, {
+    mutationKey: ["workspace:update"],
+    mutationFn: async ({ id, name }: UpdateInput) => {
+      const res = await apiClient<WorkspaceDTO>(`/api/workspaces/${encodeURIComponent(id)}`, {
         method: "PATCH",
-        body: JSON.stringify({ ...input }),
+        body: JSON.stringify({ name }),
       });
 
-      if (res.error) {
-        throw new Error(res.error.message);
-      }
-
-      if (!res.data) {
-        throw new Error("Empty response");
-      }
-
-      return res.data.data;
+      return unwrap(res);
     },
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: qk.workspaces() });
-      toast.success("Workspace updated");
+    onSuccess: () => {
+      toast.success("Workspace renamed");
     },
-    onError: (err: Error) => toast.error(err.message),
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
   });
 }
