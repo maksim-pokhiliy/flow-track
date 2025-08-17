@@ -1,11 +1,10 @@
 "use client";
 
+import { Role } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient, unwrap } from "@app/shared/api";
 import { qk } from "@app/shared/query-keys";
-
-type Role = "OWNER" | "ADMIN" | "MEMBER";
 
 export type WorkspaceListItem = {
   id: string;

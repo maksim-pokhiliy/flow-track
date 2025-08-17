@@ -1,7 +1,7 @@
 import { Role } from "@prisma/client";
 
 import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 export async function createWorkspace(userId: string, name: string) {
   if (!name.trim()) {

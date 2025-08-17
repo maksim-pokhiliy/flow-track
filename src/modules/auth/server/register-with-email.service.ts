@@ -1,5 +1,5 @@
 import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 import { hashPassword } from "./password.service";
 

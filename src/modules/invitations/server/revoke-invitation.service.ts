@@ -1,5 +1,5 @@
 import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 export async function revokeInvitation(token: string) {
   const inv = await prisma.invitation.findUnique({ where: { token } });

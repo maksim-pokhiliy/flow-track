@@ -1,4 +1,3 @@
 export * from "./cn";
-export * from "./env";
+export * from "./env.client";
 export * from "./is-expired";
-export * from "./prisma";

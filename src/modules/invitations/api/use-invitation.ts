@@ -1,21 +1,18 @@
 "use client";
 
-import { Invitation } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient, unwrap } from "@app/shared/api";
 import { qk } from "@app/shared/query-keys";
 
-type GetInvitationResponse = {
-  data: Invitation;
-};
+import { InvitationWithWorkspace } from "../model";
 
 export function useInvitation(token: string | null | undefined) {
   return useQuery({
     queryKey: qk.invitation(token ?? ""),
     enabled: Boolean(token),
     queryFn: async () => {
-      const res = await apiClient<GetInvitationResponse>(
+      const res = await apiClient<InvitationWithWorkspace>(
         `/api/invitations/${encodeURIComponent(token ?? "")}`,
         {
           method: "GET",

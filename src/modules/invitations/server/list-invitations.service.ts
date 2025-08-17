@@ -1,5 +1,5 @@
 import { requireUserId } from "@app/modules/auth/server";
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 import { assertAdminOrOwner } from "./assert-admin-or-owner.service";
 
