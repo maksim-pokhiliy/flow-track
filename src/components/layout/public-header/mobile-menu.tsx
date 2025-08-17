@@ -36,14 +36,14 @@ export function MobileMenu() {
         </SheetHeader>
 
         <Stack className="mt-6" spacing={4}>
-          <Stack as="nav" spacing={2}>
+          <Stack as="nav" spacing={2} className="px-4">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  "py-2 px-3 rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                  "py-2 px-3 rounded-sm text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                   pathname === item.href
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground",
@@ -56,7 +56,7 @@ export function MobileMenu() {
 
           <Separator />
 
-          <Stack spacing={4} className="px-3">
+          <Stack spacing={4} className="px-4">
             <Button variant="outline" asChild>
               <Link href="/login" onClick={() => setOpen(false)}>
                 Log in

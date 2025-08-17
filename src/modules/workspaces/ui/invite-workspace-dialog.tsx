@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Role } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
 import { Stack } from "@app/components/layout";
@@ -26,7 +27,7 @@ type Props = {
 export function InviteWorkspaceDialog({ open, workspaceId, onOpenChange }: Props) {
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteFormSchema),
-    defaultValues: { email: "", role: "MEMBER" },
+    defaultValues: { email: "", role: Role.MEMBER },
   });
 
   const { mutate: createInvitation, isPending } = useCreateInvitation(workspaceId);
@@ -37,7 +38,7 @@ export function InviteWorkspaceDialog({ open, workspaceId, onOpenChange }: Props
       {
         onSuccess: () => {
           onOpenChange(false);
-          form.reset({ email: "", role: "MEMBER" });
+          form.reset({ email: "", role: Role.MEMBER });
         },
       },
     );
@@ -50,7 +51,7 @@ export function InviteWorkspaceDialog({ open, workspaceId, onOpenChange }: Props
         onOpenChange(v);
 
         if (v) {
-          form.reset({ email: "", role: "MEMBER" });
+          form.reset({ email: "", role: Role.MEMBER });
         }
       }}
       title="Invite member"
@@ -85,7 +86,7 @@ export function InviteWorkspaceDialog({ open, workspaceId, onOpenChange }: Props
                     >
                       <Stack direction="row" spacing={4}>
                         <Stack direction="row" align="center" spacing={2}>
-                          <RadioGroupItem value="MEMBER" id="role-member" />
+                          <RadioGroupItem value={Role.MEMBER} id="role-member" />
 
                           <FormLabel htmlFor="role-member" className="font-normal">
                             Member
@@ -93,7 +94,7 @@ export function InviteWorkspaceDialog({ open, workspaceId, onOpenChange }: Props
                         </Stack>
 
                         <Stack direction="row" align="center" spacing={2}>
-                          <RadioGroupItem value="ADMIN" id="role-admin" />
+                          <RadioGroupItem value={Role.ADMIN} id="role-admin" />
 
                           <FormLabel htmlFor="role-admin" className="font-normal">
                             Admin
