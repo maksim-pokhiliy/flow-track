@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import { registerSchema } from "@app/modules/auth/model";
 import { registerWithEmail } from "@app/modules/auth/server";
-import { AppError, ERROR_CODES, toApiResponse } from "@app/shared/api";
+import { toApiResponse } from "@app/shared/api";
 
 export async function POST(request: Request) {
   try {
@@ -20,14 +19,6 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return toApiResponse(error);
-    }
-
-    if (error instanceof Error && error.message === "Email already in use") {
-      return toApiResponse(new AppError(ERROR_CODES.EMAIL_EXISTS, "Email already in use"));
-    }
-
     return toApiResponse(error);
   }
 }

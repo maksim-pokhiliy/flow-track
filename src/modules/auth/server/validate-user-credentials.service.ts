@@ -1,4 +1,4 @@
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 import { verifyPassword } from "./password.service";
 

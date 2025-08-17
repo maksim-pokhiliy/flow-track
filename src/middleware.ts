@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
+import { envServer } from "./shared/lib/env.server";
+
 const PUBLIC_ROUTES = ["/", "/login", "/register", "/pricing", "/invite"] as const;
 
 function isPublic(pathname: string): boolean {
@@ -19,7 +21,7 @@ function safeInternalPath(path: string | null): string | null {
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ req, secret: envServer.NEXTAUTH_SECRET });
 
   if (!isPublic(pathname) && !token) {
     const url = new URL("/login", req.url);

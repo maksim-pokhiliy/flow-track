@@ -1,4 +1,4 @@
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 export async function listWorkspaces(userId: string) {
   const memberships = await prisma.membership.findMany({
