@@ -4,7 +4,7 @@ import { Role } from "@prisma/client";
 
 import { requireUserId } from "@app/modules/auth/server";
 import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib";
+import { prisma } from "@app/shared/lib/server";
 
 import { assertAdminOrOwner } from "./assert-admin-or-owner.service";
 
