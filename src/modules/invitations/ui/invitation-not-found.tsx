@@ -1,6 +1,5 @@
 "use client";
 
-import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -17,9 +16,6 @@ export function InvitationNotFound() {
   return (
     <Card className="w-full">
       <CardHeader className="text-center">
-        <div className="mx-auto w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
-          <AlertCircle className="w-6 h-6 text-destructive" />
-        </div>
         <CardTitle className="text-2xl">Invalid invitation</CardTitle>
       </CardHeader>
 
