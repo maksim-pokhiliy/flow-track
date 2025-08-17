@@ -66,7 +66,7 @@ export function WorkspacesSection({ workspaces }: WorkspacesSectionProps) {
       <Stack spacing={4}>
         <Typography variant="h3">Your workspaces</Typography>
 
-        <ul className="divide-y rounded-lg border">
+        <ul className="divide-y rounded-sm border">
           {workspaces.map((ws) => (
             <li key={ws.id}>
               <WorkspaceItemRow

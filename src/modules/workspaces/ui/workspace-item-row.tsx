@@ -1,5 +1,6 @@
 "use client";
 
+import { Role } from "@prisma/client";
 import { MoreHorizontal } from "lucide-react";
 
 import { Stack } from "@app/components/layout";
@@ -31,7 +32,7 @@ export function WorkspaceItemRow({
   isUpdating,
   isDeleting,
 }: Props) {
-  const isOwner = workspace.role === "OWNER";
+  const isOwner = workspace.role === Role.OWNER;
 
   return (
     <Stack direction="row" align="center" justify="between" className="p-4">

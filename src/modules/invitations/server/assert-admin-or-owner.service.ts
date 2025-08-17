@@ -1,3 +1,5 @@
+import { Role } from "@prisma/client";
+
 import { AppError, ERROR_CODES } from "@app/shared/api";
 import { prisma } from "@app/shared/lib/server";
 
@@ -7,7 +9,7 @@ export async function assertAdminOrOwner(userId: string, workspaceId: string) {
     select: { role: true },
   });
 
-  if (!membership || (membership.role !== "OWNER" && membership.role !== "ADMIN")) {
+  if (!membership || (membership.role !== Role.OWNER && membership.role !== Role.ADMIN)) {
     throw new AppError(ERROR_CODES.FORBIDDEN, "Only OWNER or ADMIN can manage invitations");
   }
 }

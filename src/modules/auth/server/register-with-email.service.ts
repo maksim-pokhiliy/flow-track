@@ -1,3 +1,5 @@
+import { Role } from "@prisma/client";
+
 import { AppError, ERROR_CODES } from "@app/shared/api";
 import { prisma } from "@app/shared/lib/server";
 
@@ -31,7 +33,7 @@ export async function registerWithEmail(email: string, password: string, name: s
       data: {
         userId: user.id,
         workspaceId: workspace.id,
-        role: "OWNER",
+        role: Role.OWNER,
       },
     });
 

@@ -4,10 +4,10 @@ import { createInvitation, listInvitations } from "@app/modules/invitations/serv
 import { inviteCreateSchema } from "@app/modules/workspaces/model";
 import { toApiResponse } from "@app/shared/api";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(_req: Request, ctx: { params: Promise<{ workspaceId: string }> }) {
   try {
-    const { id } = await ctx.params;
-    const data = await listInvitations(id);
+    const { workspaceId } = await ctx.params;
+    const data = await listInvitations(workspaceId);
 
     return NextResponse.json({ data });
   } catch (e: unknown) {
@@ -15,12 +15,12 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   }
 }
 
-export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request, ctx: { params: Promise<{ workspaceId: string }> }) {
   try {
-    const { id } = await ctx.params;
+    const { workspaceId } = await ctx.params;
     const body = await req.json();
     const { email, role } = inviteCreateSchema.parse(body);
-    const invite = await createInvitation(id, email, role);
+    const invite = await createInvitation(workspaceId, email, role);
 
     return NextResponse.json({ data: invite, invalidate: ["invitations"] }, { status: 201 });
   } catch (e: unknown) {
