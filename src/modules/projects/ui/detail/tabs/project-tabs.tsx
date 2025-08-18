@@ -4,32 +4,29 @@ import { Role } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@app/components/ui";
-
-import { DEFAULT_PROJECT_TAB, PROJECT_TABS, type ProjectTab } from "../../../model";
+import { DEFAULT_PROJECT_TAB, ProjectDTO, ProjectTab } from "@app/modules/projects/model";
 
 import { ProjectSettingsTab } from "./project-settings-tab";
 import { ProjectTasksTab } from "./project-tasks-tab";
 
 type Props = {
-  projectId: string;
+  project: ProjectDTO;
   workspaceId: string;
   userRole: Role;
 };
 
 const TABS_CONFIG = [
   {
-    value: PROJECT_TABS.TASKS,
+    value: "tasks" as const,
     label: "Tasks",
-    component: ProjectTasksTab,
   },
   {
-    value: PROJECT_TABS.SETTINGS,
+    value: "settings" as const,
     label: "Settings",
-    component: ProjectSettingsTab,
   },
 ] as const;
 
-export function ProjectTabs({ projectId, workspaceId, userRole }: Props) {
+export function ProjectTabs({ project, workspaceId, userRole }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -52,15 +49,18 @@ export function ProjectTabs({ projectId, workspaceId, userRole }: Props) {
         ))}
       </TabsList>
 
-      {TABS_CONFIG.map((tab) => {
-        const Component = tab.component;
+      <TabsContent value="tasks" className="mt-6">
+        <ProjectTasksTab projectId={project.id} workspaceId={workspaceId} />
+      </TabsContent>
 
-        return (
-          <TabsContent key={tab.value} value={tab.value} className="mt-6">
-            <Component projectId={projectId} workspaceId={workspaceId} userRole={userRole} />
-          </TabsContent>
-        );
-      })}
+      <TabsContent value="settings" className="mt-6">
+        <ProjectSettingsTab
+          projectId={project.id}
+          workspaceId={workspaceId}
+          userRole={userRole}
+          project={project}
+        />
+      </TabsContent>
     </Tabs>
   );
 }
