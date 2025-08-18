@@ -7,8 +7,8 @@ import { useState } from "react";
 import { ContentSection, EmptyState, QueryWrapper } from "@app/components/layout";
 import { useWorkspaces } from "@app/modules/workspaces/api";
 
-import { useDeleteProject, useProjects, useUpdateProject } from "../api";
-import type { ProjectDTO } from "../model";
+import { useDeleteProject, useProjects, useUpdateProject } from "../../api";
+import type { ProjectDTO } from "../../model";
 
 import { CreateProjectForm } from "./create-project-form";
 import { DeleteProjectDialog } from "./delete-project-dialog";

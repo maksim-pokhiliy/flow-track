@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { EmptyState, Stack } from "@app/components/layout";
 import { Typography } from "@app/components/ui";
 
-import type { ProjectDTO } from "../model";
+import type { ProjectDTO } from "../../model";
 
 import { ProjectItemRow } from "./project-item-row";
 

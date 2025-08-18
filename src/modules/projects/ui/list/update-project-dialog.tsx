@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { FormModal } from "@app/components/systems/modal/form-modal";
 import { FormField, FormInput } from "@app/components/ui";
 
-import { type UpdateProjectInput, updateProjectSchema } from "../model";
+import { type UpdateProjectInput, updateProjectSchema } from "../../model";
 
 type Props = {
   open: boolean;

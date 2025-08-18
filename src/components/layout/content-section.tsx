@@ -5,7 +5,7 @@ import { Typography } from "@app/components/ui";
 
 interface ContentSectionProps {
   title?: string;
-  subtitle?: string;
+  subtitle?: string | ReactNode;
   backgroundColor?: "light" | "dark";
   maxWidth?: "sm" | "md" | "lg" | "xl";
   children?: ReactNode;
@@ -24,11 +24,14 @@ export const ContentSection = ({
           <Stack spacing={2}>
             {title && <Typography variant="h1">{title}</Typography>}
 
-            {subtitle && (
-              <Typography variant="body1" className="opacity-60">
-                {subtitle}
-              </Typography>
-            )}
+            {subtitle &&
+              (typeof subtitle === "string" ? (
+                <Typography variant="body1" className="opacity-60">
+                  {subtitle}
+                </Typography>
+              ) : (
+                subtitle
+              ))}
           </Stack>
         )}
 
