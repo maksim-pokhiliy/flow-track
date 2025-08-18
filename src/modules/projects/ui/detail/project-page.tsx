@@ -31,7 +31,7 @@ export function ProjectPage() {
     >
       {(proj) => (
         <ContentSection title={proj.name} subtitle={<ProjectHeader project={proj} />}>
-          <ProjectTabs projectId={projectId} workspaceId={workspaceId} userRole={userRole} />
+          <ProjectTabs project={proj} workspaceId={workspaceId} userRole={userRole} />
         </ContentSection>
       )}
     </QueryWrapper>
