@@ -23,3 +23,12 @@ export type ProjectDTO = {
     timeEntries: number;
   };
 };
+
+export const PROJECT_TABS = {
+  TASKS: "tasks",
+  SETTINGS: "settings",
+} as const;
+
+export type ProjectTab = (typeof PROJECT_TABS)[keyof typeof PROJECT_TABS];
+
+export const DEFAULT_PROJECT_TAB = PROJECT_TABS.TASKS;
