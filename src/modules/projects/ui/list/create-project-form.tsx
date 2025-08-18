@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { Stack } from "@app/components/layout";
 import { Button, Form, FormField, FormInput } from "@app/components/ui";
 
-import { useCreateProject } from "../api";
-import { type CreateProjectInput, createProjectSchema } from "../model";
+import { useCreateProject } from "../../api";
+import { type CreateProjectInput, createProjectSchema } from "../../model";
 
 type Props = {
   workspaceId: string;

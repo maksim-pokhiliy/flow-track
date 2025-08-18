@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@app/components/ui/dropdown-menu";
 
-import type { ProjectDTO } from "../model";
+import type { ProjectDTO } from "../../model";
 
 type Props = {
   project: ProjectDTO;
