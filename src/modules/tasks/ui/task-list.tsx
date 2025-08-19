@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { EmptyState, Stack } from "@app/components/layout";
+import { Stack } from "@app/components/layout";
 import { Typography } from "@app/components/ui";
 
 import { useDeleteTask, useUpdateTask } from "../api";
@@ -56,15 +56,6 @@ export function TaskList({ tasks, workspaceId, projectId }: Props) {
     setUpdateTarget(null);
     setDeleteTarget(null);
   };
-
-  if (tasks.length === 0) {
-    return (
-      <EmptyState
-        title="No tasks yet"
-        description="Create your first task to start organizing work"
-      />
-    );
-  }
 
   return (
     <>
