@@ -17,5 +17,5 @@ export async function revokeInvitation(token: string) {
     data: { status: "REVOKED", revokedAt: new Date() },
   });
 
-  return { id: updated.id, status: updated.status };
+  return updated;
 }

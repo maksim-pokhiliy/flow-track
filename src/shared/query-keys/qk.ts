@@ -6,4 +6,6 @@ export const qk = {
   invitation: (token: string) => ["invitation", token],
   projects: (workspaceId: string) => ["projects", workspaceId],
   project: (workspaceId: string, projectId: string) => ["project", workspaceId, projectId],
+  tasks: (projectId: string) => ["tasks", projectId],
+  task: (taskId: string) => ["task", taskId],
 };

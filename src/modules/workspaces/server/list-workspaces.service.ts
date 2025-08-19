@@ -10,9 +10,8 @@ export async function listWorkspaces(userId: string) {
   });
 
   return memberships.map((m) => ({
-    id: m.workspace.id,
-    name: m.workspace.name,
-    createdAt: m.workspace.createdAt.toISOString(),
+    ...m.workspace,
     role: m.role,
+    createdAt: m.workspace.createdAt.toISOString(),
   }));
 }

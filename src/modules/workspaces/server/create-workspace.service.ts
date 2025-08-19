@@ -25,8 +25,7 @@ export async function createWorkspace(userId: string, name: string) {
   });
 
   return {
-    id: ws.id,
-    name: ws.name,
+    ...ws,
     createdAt: ws.createdAt.toISOString(),
   };
 }

@@ -20,8 +20,8 @@ export async function listProjects(userId: string, workspaceId: string): Promise
     orderBy: [{ isArchived: "asc" }, { createdAt: "desc" }],
   });
 
-  return projects.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
+  return projects.map((project) => ({
+    ...project,
+    createdAt: project.createdAt.toISOString(),
   }));
 }

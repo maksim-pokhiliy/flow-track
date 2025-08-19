@@ -29,5 +29,5 @@ export async function acceptInvitation(token: string, userId: string) {
     });
   });
 
-  return { workspaceId: inv.workspaceId };
+  return inv;
 }
