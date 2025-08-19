@@ -8,8 +8,10 @@ export async function listInvitations(workspaceId: string) {
 
   await assertAdminOrOwner(actorId, workspaceId);
 
-  return prisma.invitation.findMany({
+  const invitations = await prisma.invitation.findMany({
     where: { workspaceId },
     orderBy: { createdAt: "desc" },
   });
+
+  return invitations;
 }

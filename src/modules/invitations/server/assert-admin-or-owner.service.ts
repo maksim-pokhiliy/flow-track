@@ -10,6 +10,9 @@ export async function assertAdminOrOwner(userId: string, workspaceId: string) {
   });
 
   if (!membership || (membership.role !== Role.OWNER && membership.role !== Role.ADMIN)) {
-    throw new AppError(ERROR_CODES.FORBIDDEN, "Only OWNER or ADMIN can manage invitations");
+    throw new AppError(
+      ERROR_CODES.FORBIDDEN,
+      `Only ${Role.OWNER} or ${Role.ADMIN} can manage invitations`,
+    );
   }
 }

@@ -9,7 +9,7 @@ export async function deleteWorkspace(userId: string, workspaceId: string) {
   try {
     const ws = await prisma.workspace.delete({ where: { id: workspaceId } });
 
-    return { id: ws.id };
+    return ws;
   } catch {
     throw new AppError(ERROR_CODES.NOT_FOUND, "Workspace not found");
   }
