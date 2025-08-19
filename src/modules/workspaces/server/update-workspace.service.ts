@@ -15,9 +15,5 @@ export async function updateWorkspace(userId: string, workspaceId: string, name:
     data: { name },
   });
 
-  return {
-    id: ws.id,
-    name: ws.name,
-    createdAt: ws.createdAt.toISOString(),
-  };
+  return { ...ws, createdAt: ws.createdAt.toISOString() };
 }

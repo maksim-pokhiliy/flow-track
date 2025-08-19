@@ -10,13 +10,7 @@ export async function validateUserCredentials(email: string, password: string) {
   }
 
   const isValid = await verifyPassword(password, user.passwordHash);
+  const output = isValid ? user : null;
 
-  return isValid
-    ? {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-      }
-    : null;
+  return output;
 }

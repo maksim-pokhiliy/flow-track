@@ -1,29 +1,26 @@
 "use client";
 
-import { Plus } from "lucide-react";
-
-import { EmptyState, Stack } from "@app/components/layout";
-import { Button } from "@app/components/ui";
+import { QueryWrapper, Stack } from "@app/components/layout";
+import { useTasks } from "@app/modules/tasks/api";
+import { CreateTaskForm, TaskList } from "@app/modules/tasks/ui";
 
 type Props = {
   projectId: string;
   workspaceId: string;
 };
 
-export function ProjectTasksTab(_: Props) {
-  return (
-    <Stack spacing={4}>
-      <Stack direction="row" align="center" justify="between">
-        <Button size="sm">
-          <Plus className="h-4 w-4" />
-          Add task
-        </Button>
-      </Stack>
+export function ProjectTasksTab({ projectId, workspaceId }: Props) {
+  const { data: tasks, isLoading, error } = useTasks(workspaceId, projectId);
 
-      <EmptyState
-        title="No tasks yet"
-        description="Create your first task to start organizing work"
-      />
+  return (
+    <Stack spacing={6}>
+      <CreateTaskForm workspaceId={workspaceId} projectId={projectId} />
+
+      <QueryWrapper isLoading={isLoading} loadingText="Loading tasks..." error={error} data={tasks}>
+        {(taskList) => (
+          <TaskList tasks={taskList} workspaceId={workspaceId} projectId={projectId} />
+        )}
+      </QueryWrapper>
     </Stack>
   );
 }
