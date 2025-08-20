@@ -15,7 +15,7 @@ type UseTimeEntriesOptions = {
 
 export function useTimeEntries({ workspaceId, projectId, limit = 50 }: UseTimeEntriesOptions) {
   return useQuery({
-    queryKey: qk.timeEntries(workspaceId ?? "", projectId),
+    queryKey: qk.timeEntries(workspaceId, projectId),
     enabled: Boolean(workspaceId),
     queryFn: async () => {
       if (!workspaceId) {

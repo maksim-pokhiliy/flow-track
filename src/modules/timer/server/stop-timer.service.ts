@@ -48,19 +48,13 @@ export async function stopTimer(
     },
   });
 
-  if (!stoppedTimer.endTime || stoppedTimer.durationSec === null) {
-    throw new Error(
-      `Failed to stop timer: ${
-        !stoppedTimer.endTime
-          ? "missing endTime"
-          : "missing durationSec"
-      }`
-    );
-  }
+  const endTime = stoppedTimer.endTime ?? now;
+  const finalDurationSec = stoppedTimer.durationSec ?? durationSec;
 
   return {
     ...stoppedTimer,
     startTime: stoppedTimer.startTime.toISOString(),
-    endTime: stoppedTimer.endTime.toISOString(),
+    endTime: endTime.toISOString(),
+    durationSec: finalDurationSec,
   };
 }

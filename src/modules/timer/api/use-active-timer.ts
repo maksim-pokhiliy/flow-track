@@ -9,7 +9,7 @@ import type { TimeEntryDTO } from "../model";
 
 export function useActiveTimer(workspaceId: string | null) {
   return useQuery({
-    queryKey: qk.activeTimer(workspaceId ?? ""),
+    queryKey: qk.activeTimer(workspaceId),
     enabled: Boolean(workspaceId),
     queryFn: async () => {
       if (!workspaceId) {
