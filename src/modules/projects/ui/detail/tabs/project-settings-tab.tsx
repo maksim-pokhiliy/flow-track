@@ -47,7 +47,7 @@ export function ProjectSettingsTab({ projectId, workspaceId, userRole, project }
       { workspaceId, projectId },
       {
         onSuccess: () => {
-          router.push(`/workspaces/${workspaceId}/projects`);
+          router.push("/projects");
         },
       },
     );

@@ -18,21 +18,13 @@ import type { ProjectDTO } from "../../model";
 
 type Props = {
   project: ProjectDTO;
-  workspaceId: string;
   userRole: Role;
   onRename: () => void;
   onArchive: () => void;
   onDelete: () => void;
 };
 
-export function ProjectItemRow({
-  project,
-  workspaceId,
-  userRole,
-  onRename,
-  onArchive,
-  onDelete,
-}: Props) {
+export function ProjectItemRow({ project, userRole, onRename, onArchive, onDelete }: Props) {
   const canEdit = userRole === Role.OWNER || userRole === Role.ADMIN;
   const canDelete = userRole === Role.OWNER;
 
@@ -40,10 +32,7 @@ export function ProjectItemRow({
     <Stack direction="row" align="center" justify="between" className="p-4">
       <Stack spacing={2}>
         <Stack direction="row" align="center" spacing={2}>
-          <Link
-            href={`/workspaces/${workspaceId}/projects/${project.id}`}
-            className="hover:underline"
-          >
+          <Link href={`/projects/${project.id}`} className="hover:underline">
             <Typography variant="h4">{project.name}</Typography>
           </Link>
 

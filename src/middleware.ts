@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if ((pathname === "/login" || pathname === "/register") && token) {
-    const target = safeInternalPath(req.nextUrl.searchParams.get("callbackUrl")) ?? "/workspaces";
+    const target = safeInternalPath(req.nextUrl.searchParams.get("callbackUrl")) ?? "/timer";
 
     return NextResponse.redirect(new URL(target, req.url));
   }

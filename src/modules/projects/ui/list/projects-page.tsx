@@ -1,11 +1,11 @@
 "use client";
 
 import { Role } from "@prisma/client";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { ContentSection, EmptyState, QueryWrapper } from "@app/components/layout";
 import { useWorkspaces } from "@app/modules/workspaces/api";
+import { useWorkspaceStore } from "@app/shared/store";
 
 import { useDeleteProject, useProjects, useUpdateProject } from "../../api";
 import type { ProjectDTO } from "../../model";
@@ -16,11 +16,10 @@ import { ProjectsSection } from "./projects-section";
 import { UpdateProjectDialog } from "./update-project-dialog";
 
 export function ProjectsPage() {
-  const params = useParams();
-  const workspaceId = params["workspaceId"] as string;
+  const { currentWorkspaceId: workspaceId } = useWorkspaceStore();
 
-  const { data: workspaces } = useWorkspaces();
-  const { data: projects, isLoading, error } = useProjects(workspaceId);
+  const { data: workspaces, isLoading: workspacesLoading } = useWorkspaces();
+  const { data: projects, isLoading: projectsLoading, error } = useProjects(workspaceId);
 
   const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
   const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
@@ -62,7 +61,7 @@ export function ProjectsPage() {
   return (
     <>
       <QueryWrapper
-        isLoading={isLoading}
+        isLoading={workspacesLoading || projectsLoading}
         loadingText="Loading projects..."
         error={error}
         data={projects}
