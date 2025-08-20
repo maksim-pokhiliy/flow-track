@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { FormModal } from "@app/components/systems/modal/form-modal";
+import { FormModal } from "@app/components/flows/modal/form-modal";
 import { FormField, FormInput } from "@app/components/ui";
 
 import { type UpdateProjectInput, updateProjectSchema } from "../../model";
