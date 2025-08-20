@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+import { FormModal } from "@app/components/flows";
 import { Stack } from "@app/components/layout";
-import { FormModal } from "@app/components/systems";
 import { FormField, FormInput, FormItem, FormLabel } from "@app/components/ui";
 
 import { TaskDTO, UpdateTaskInput, updateTaskSchema } from "../model";

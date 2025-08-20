@@ -111,7 +111,7 @@ src/
       # health (optional): api/health/route.ts
   components/{layout,ui}
   modules/{auth,landing,...}
-  shared/{api,lib,providers,query-keys}
+  shared/{api,lib,query-keys}
 prisma/{schema.prisma,migrations}
 ```
 

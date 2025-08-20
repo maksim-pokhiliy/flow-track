@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { RootProvider } from "@app/shared/providers";
+import { PublicRootProvider } from "@app/components/providers/public-root-provider";
 
 import "./globals.css";
 
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <RootProvider>{children}</RootProvider>
+        <PublicRootProvider>{children}</PublicRootProvider>
       </body>
     </html>
   );
