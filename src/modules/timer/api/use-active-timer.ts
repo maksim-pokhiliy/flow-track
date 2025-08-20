@@ -23,6 +23,6 @@ export function useActiveTimer(workspaceId: string | null) {
 
       return unwrap(res);
     },
-    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
   });
 }
