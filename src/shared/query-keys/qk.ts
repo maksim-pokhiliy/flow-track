@@ -8,4 +8,7 @@ export const qk = {
   project: (workspaceId: string, projectId: string) => ["project", workspaceId, projectId],
   tasks: (projectId: string) => ["tasks", projectId],
   task: (taskId: string) => ["task", taskId],
+  activeTimer: (workspaceId: string) => ["timer", "active", workspaceId],
+  timeEntries: (workspaceId: string, projectId?: string) =>
+    projectId ? ["time-entries", workspaceId, projectId] : ["time-entries", workspaceId],
 };
