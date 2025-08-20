@@ -6,7 +6,7 @@ import { ReactNode, useEffect, useState } from "react";
 
 import { Toaster } from "@app/components/ui";
 import { setQueryClientForInvalidation } from "@app/shared/api/interceptors/cache-invalidation";
-import { ThemeProvider } from "@app/shared/providers";
+import { ThemeProvider, WorkspaceProvider } from "@app/shared/providers";
 
 type RootProviderProps = {
   children: ReactNode;
@@ -33,8 +33,8 @@ export function RootProvider({ children }: RootProviderProps) {
     <ThemeProvider>
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
-          {children}
-          <Toaster position="bottom-center" expand={false} duration={4000} />
+          <WorkspaceProvider>{children}</WorkspaceProvider>
+          <Toaster position="bottom-right" expand={false} duration={4000} />
         </QueryClientProvider>
       </SessionProvider>
     </ThemeProvider>

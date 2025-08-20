@@ -1,7 +1,6 @@
 "use client";
 
 import { Role } from "@prisma/client";
-import { useParams } from "next/navigation";
 
 import { EmptyState, Stack } from "@app/components/layout";
 import { Typography } from "@app/components/ui";
@@ -19,9 +18,6 @@ type Props = {
 };
 
 export function ProjectsSection({ projects, userRole, onRename, onArchive, onDelete }: Props) {
-  const params = useParams();
-  const workspaceId = params["workspaceId"] as string;
-
   const activeProjects = projects.filter((p) => !p.isArchived);
   const archivedProjects = projects.filter((p) => p.isArchived);
 
@@ -45,7 +41,6 @@ export function ProjectsSection({ projects, userRole, onRename, onArchive, onDel
               <li key={project.id}>
                 <ProjectItemRow
                   project={project}
-                  workspaceId={workspaceId}
                   userRole={userRole}
                   onRename={() => onRename(project)}
                   onArchive={() => onArchive(project)}
@@ -66,7 +61,6 @@ export function ProjectsSection({ projects, userRole, onRename, onArchive, onDel
               <li key={project.id}>
                 <ProjectItemRow
                   project={project}
-                  workspaceId={workspaceId}
                   userRole={userRole}
                   onRename={() => onRename(project)}
                   onArchive={() => onArchive(project)}
