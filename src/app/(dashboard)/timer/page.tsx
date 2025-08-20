@@ -1,3 +1,5 @@
-export default function TimerPage() {
-  return <div className="p-8">Timer (stub)</div>;
-}
+export { TimerPage as default } from "@app/modules/timer/ui";
+
+export const metadata = {
+  title: "FlowTrack | Timer",
+};

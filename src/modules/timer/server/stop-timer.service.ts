@@ -1,4 +1,3 @@
-import { AppError, ERROR_CODES } from "@app/shared/api";
 import { prisma } from "@app/shared/lib/server";
 
 import type { StopTimerInput, TimeEntryDTO } from "../model";
@@ -32,10 +31,6 @@ export async function stopTimer(
   const durationMs = now.getTime() - activeTimer.startTime.getTime();
   const durationSec = Math.floor(durationMs / 1000);
 
-  if (durationSec < 1) {
-    throw new AppError(ERROR_CODES.INVALID_INPUT, "Timer duration too short");
-  }
-
   const stoppedTimer = await prisma.timeEntry.update({
     where: { id: activeTimer.id },
     data: {
@@ -53,10 +48,13 @@ export async function stopTimer(
     },
   });
 
+  const endTime = stoppedTimer.endTime ?? now;
+  const finalDurationSec = stoppedTimer.durationSec ?? durationSec;
+
   return {
     ...stoppedTimer,
     startTime: stoppedTimer.startTime.toISOString(),
-    endTime: stoppedTimer.endTime!.toISOString(),
-    durationSec: stoppedTimer.durationSec!,
+    endTime: endTime.toISOString(),
+    durationSec: finalDurationSec,
   };
 }
