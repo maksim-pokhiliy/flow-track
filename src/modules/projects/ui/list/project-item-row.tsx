@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@app/components/ui/dropdown-menu";
 
@@ -68,14 +67,10 @@ export function ProjectItemRow({ project, userRole, onRename, onArchive, onDelet
           </DropdownMenuItem>
 
           {canDelete && (
-            <>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem variant="destructive" onSelect={onDelete} disabled={!canDelete}>
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </>
+            <DropdownMenuItem variant="destructive" onSelect={onDelete} disabled={!canDelete}>
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete
+            </DropdownMenuItem>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

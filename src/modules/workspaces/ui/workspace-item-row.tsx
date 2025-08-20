@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@app/components/ui/dropdown-menu";
 
@@ -59,8 +58,6 @@ export function WorkspaceItemRow({
         <DropdownMenuContent align="end" sideOffset={6}>
           <DropdownMenuItem onSelect={onRename}>Rename</DropdownMenuItem>
           <DropdownMenuItem onSelect={onInvite}>Invite member</DropdownMenuItem>
-
-          <DropdownMenuSeparator />
 
           <DropdownMenuItem
             variant="destructive"
