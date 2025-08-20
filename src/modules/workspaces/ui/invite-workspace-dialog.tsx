@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Role } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
+import { FormModal } from "@app/components/flows/modal/form-modal";
 import { Stack } from "@app/components/layout";
-import { FormModal } from "@app/components/systems/modal/form-modal";
 import {
   FormControl,
   FormField,
