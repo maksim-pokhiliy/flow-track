@@ -6,3 +6,4 @@ export * from "./logo";
 export * from "./public-header";
 export * from "./query-wrapper";
 export * from "./stack";
+export * from "./workspace-selector";
