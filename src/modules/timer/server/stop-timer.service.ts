@@ -49,7 +49,13 @@ export async function stopTimer(
   });
 
   if (!stoppedTimer.endTime || stoppedTimer.durationSec === null) {
-    throw new Error("Failed to stop timer: missing endTime or duration");
+    throw new Error(
+      `Failed to stop timer: ${
+        !stoppedTimer.endTime
+          ? "missing endTime"
+          : "missing durationSec"
+      }`
+    );
   }
 
   return {
