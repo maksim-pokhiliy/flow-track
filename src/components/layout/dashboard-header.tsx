@@ -12,7 +12,6 @@ import { useWorkspaceStore } from "@app/shared/store";
 const navItems = [
   { href: "/projects", label: "Projects" },
   { href: "/timer", label: "Timer" },
-  { href: "/analytics", label: "Analytics" },
 ];
 
 export function DashboardHeader() {
