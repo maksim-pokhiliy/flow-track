@@ -1,84 +1,66 @@
 "use client";
 
 import { Pause, Play } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { Button, Typography } from "@app/components/ui";
-import { useWorkspaceStore } from "@app/shared/store";
+import { Stack } from "@app/components/layout";
+import { Badge, Button, Typography } from "@app/components/ui";
+import { useTimerStore, useWorkspaceStore } from "@app/shared/store";
 
 import { useActiveTimer, useStartTimer, useStopTimer } from "../api";
 
 export function TimerWidget() {
+  const { elapsed, syncWithActiveTimer, clear } = useTimerStore();
   const { currentWorkspaceId } = useWorkspaceStore();
-  const { data: activeTimer } = useActiveTimer(currentWorkspaceId);
-  const { isPending: isStarting } = useStartTimer();
+
+  const { data: activeTimer } = useActiveTimer();
+  const { mutate: startTimer, isPending: isStarting } = useStartTimer();
   const { mutate: stopTimer, isPending: isStopping } = useStopTimer();
 
-  const [duration, setDuration] = useState(0);
-
   useEffect(() => {
-    if (!activeTimer?.startTime) {
-      setDuration(0);
-
-      return;
+    if (activeTimer) {
+      syncWithActiveTimer({
+        startedAt: activeTimer.startedAt,
+        workspaceId: activeTimer.workspaceId,
+        projectId: activeTimer.projectId,
+        taskId: activeTimer.taskId,
+      });
+    } else {
+      clear();
     }
-
-    const updateDuration = () => {
-      const start = new Date(activeTimer.startTime).getTime();
-      const now = Date.now();
-      const seconds = Math.floor((now - start) / 1000);
-
-      setDuration(seconds);
-    };
-
-    updateDuration();
-
-    const interval = setInterval(updateDuration, 1000);
-
-    return () => clearInterval(interval);
-  }, [activeTimer?.startTime]);
+  }, [activeTimer, syncWithActiveTimer, clear]);
 
   const formatDuration = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
 
-    if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    }
-
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleToggle = () => {
-    if (!currentWorkspaceId) {
-      return;
-    }
-
     if (activeTimer) {
-      stopTimer({ workspaceId: currentWorkspaceId });
+      stopTimer();
     } else {
-      window.location.href = "/timer";
+      startTimer({ workspaceId: currentWorkspaceId, input: {} });
     }
   };
 
   const isRunning = Boolean(activeTimer);
   const isPending = isStarting || isStopping;
 
-  if (!currentWorkspaceId) {
-    return null;
-  }
-
   return (
-    <div className="flex items-center gap-2">
-      {isRunning && (
+    <Stack direction="row" spacing={2} align="center">
+      {isRunning && activeTimer && (
         <>
-          <Typography variant="caption" className="text-muted-foreground">
-            {activeTimer?.project?.name}
-          </Typography>
+          {activeTimer.workspaceId && activeTimer.workspace && (
+            <Badge variant="secondary" className="text-muted-foreground">
+              {activeTimer.workspace.name}
+            </Badge>
+          )}
 
           <Typography variant="body2" className="font-mono">
-            {formatDuration(duration)}
+            {formatDuration(elapsed)}
           </Typography>
         </>
       )}
@@ -91,6 +73,6 @@ export function TimerWidget() {
       >
         {isRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
       </Button>
-    </div>
+    </Stack>
   );
 }

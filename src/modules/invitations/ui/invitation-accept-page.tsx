@@ -26,7 +26,7 @@ export function InvitationAcceptPage() {
       error={error}
       data={invitation}
       renderEmpty={
-        <Container className="w-full min-h-full">
+        <Container className="min-h-full">
           <Stack justify="center" className="h-full">
             <ContentSection maxWidth="sm">
               <InvitationNotFound />
@@ -36,7 +36,7 @@ export function InvitationAcceptPage() {
       }
     >
       {(inv) => (
-        <Container className="w-full min-h-full">
+        <Container className="min-h-full">
           <Stack justify="center" className="h-full">
             <ContentSection maxWidth="sm">
               <InvitationContent invitation={inv} user={session?.user} />

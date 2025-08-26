@@ -4,6 +4,7 @@ import { requireUserId } from "@app/modules/auth/server";
 import { createProjectSchema } from "@app/modules/projects/model";
 import { createProject, listProjects } from "@app/modules/projects/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 type Context = {
   params: Promise<{ workspaceId: string }>;
@@ -32,7 +33,7 @@ export async function POST(req: Request, ctx: Context) {
 
     const project = await createProject(userId, workspaceId, input);
 
-    return NextResponse.json({ data: project, invalidate: ["projects"] }, { status: 201 });
+    return NextResponse.json({ data: project, invalidate: [QueryKeys.PROJECTS] }, { status: 201 });
   } catch (e: unknown) {
     return toApiResponse(e);
   }

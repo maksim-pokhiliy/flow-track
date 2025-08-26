@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { registerSchema } from "@app/modules/auth/model";
 import { registerWithEmail } from "@app/modules/auth/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
         email: user.email,
         name: user.name,
       },
+      invalidate: [QueryKeys.WORKSPACES],
     });
   } catch (error) {
     return toApiResponse(error);

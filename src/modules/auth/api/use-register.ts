@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 type RegisterInput = { name: string; email: string; password: string };
 type RegisteredUser = { id: string; name: string; email: string };
@@ -14,7 +15,7 @@ export function useRegister() {
   const router = useRouter();
 
   return useMutation({
-    mutationKey: ["auth:register"],
+    mutationKey: [MutationKeys.AUTH_REGISTER],
     mutationFn: async (input: RegisterInput) => {
       const res = await apiClient<RegisteredUser>("/api/auth/register", {
         method: "POST",

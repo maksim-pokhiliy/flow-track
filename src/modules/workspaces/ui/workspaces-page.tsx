@@ -18,7 +18,11 @@ export function WorkspacesPage() {
       data={data}
       isEmpty={(arr) => arr.length === 0}
       renderEmpty={
-        <ContentSection title="Workspaces" subtitle="Create, rename and delete your workspaces.">
+        <ContentSection
+          maxWidth="2xl"
+          title="Workspaces"
+          subtitle="Create, rename and delete your workspaces."
+        >
           <CreateWorkspaceForm />
 
           <EmptyState
@@ -29,7 +33,11 @@ export function WorkspacesPage() {
       }
     >
       {(workspaces) => (
-        <ContentSection title="Workspaces" subtitle="Create, rename and delete your workspaces.">
+        <ContentSection
+          maxWidth="2xl"
+          title="Workspaces"
+          subtitle="Create, rename and delete your workspaces."
+        >
           <CreateWorkspaceForm />
 
           <WorkspacesSection workspaces={workspaces} />

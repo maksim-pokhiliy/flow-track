@@ -9,7 +9,7 @@ import type { TaskDTO } from "../model";
 
 export function useTasks(workspaceId: string, projectId: string) {
   return useQuery({
-    queryKey: qk.tasks(projectId),
+    queryKey: qk.tasks(workspaceId, projectId),
     enabled: Boolean(workspaceId && projectId),
     queryFn: async () => {
       const res = await apiClient<TaskDTO[]>(

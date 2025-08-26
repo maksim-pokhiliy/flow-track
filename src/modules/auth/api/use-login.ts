@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
+import { MutationKeys } from "@app/shared/query-keys";
+
 type LoginInput = {
   email: string;
   password: string;
@@ -14,7 +16,7 @@ export function useLogin() {
   const router = useRouter();
 
   return useMutation({
-    mutationKey: ["auth:login"],
+    mutationKey: [MutationKeys.AUTH_LOGIN],
     mutationFn: async ({ email, password }: LoginInput) => {
       const res = await signIn("credentials", {
         redirect: false,

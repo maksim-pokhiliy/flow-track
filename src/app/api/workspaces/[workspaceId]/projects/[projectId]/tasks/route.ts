@@ -4,6 +4,7 @@ import { requireUserId } from "@app/modules/auth/server";
 import { createTaskSchema } from "@app/modules/tasks/model";
 import { createTask, listTasks } from "@app/modules/tasks/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 type Context = {
   params: Promise<{
@@ -35,7 +36,10 @@ export async function POST(req: Request, ctx: Context) {
 
     const task = await createTask(userId, projectId, input);
 
-    return NextResponse.json({ data: task, invalidate: ["tasks", "project"] }, { status: 201 });
+    return NextResponse.json(
+      { data: task, invalidate: [QueryKeys.TASKS, QueryKeys.PROJECT] },
+      { status: 201 },
+    );
   } catch (e: unknown) {
     return toApiResponse(e);
   }

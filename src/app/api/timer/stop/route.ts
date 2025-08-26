@@ -1,26 +1,20 @@
 import { NextResponse } from "next/server";
 
 import { requireUserId } from "@app/modules/auth/server";
-import { stopTimerSchema } from "@app/modules/timer/model";
-import { stopTimer } from "@app/modules/timer/server";
-import { AppError, ERROR_CODES, toApiResponse } from "@app/shared/api";
+import { stopTimer } from "@app/modules/timer/server/stop-timer.service";
+import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const userId = await requireUserId();
-    const body = await req.json();
+    const timer = await stopTimer(userId);
 
-    const input = body.note ? stopTimerSchema.parse(body) : undefined;
-    const { workspaceId } = body;
-
-    if (!workspaceId) {
-      throw new AppError(ERROR_CODES.INVALID_INPUT, "Workspace ID is required");
-    }
-
-    const timer = await stopTimer(userId, workspaceId, input);
-
-    return NextResponse.json({ data: timer, invalidate: ["timer", "time-entries"] });
-  } catch (e: unknown) {
+    return NextResponse.json({
+      data: timer,
+      invalidate: [QueryKeys.TIMER_ACTIVE, QueryKeys.TIME_ENTRIES, QueryKeys.PROJECT],
+    });
+  } catch (e) {
     return toApiResponse(e);
   }
 }

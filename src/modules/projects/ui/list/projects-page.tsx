@@ -67,7 +67,11 @@ export function ProjectsPage() {
         data={projects}
         isEmpty={(data) => data.length === 0}
         renderEmpty={
-          <ContentSection title="Projects" subtitle="Organize your work into projects">
+          <ContentSection
+            maxWidth="2xl"
+            title="Projects"
+            subtitle="Organize your work into projects"
+          >
             <CreateProjectForm workspaceId={workspaceId} />
 
             <EmptyState
@@ -78,7 +82,11 @@ export function ProjectsPage() {
         }
       >
         {(projectsList) => (
-          <ContentSection title="Projects" subtitle="Organize your work into projects">
+          <ContentSection
+            maxWidth="2xl"
+            title="Projects"
+            subtitle="Organize your work into projects"
+          >
             <CreateProjectForm workspaceId={workspaceId} />
 
             <ProjectsSection

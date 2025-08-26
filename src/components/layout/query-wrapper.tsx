@@ -26,7 +26,7 @@ export function QueryWrapper<T>({
 }: QueryWrapperProps<T>) {
   if (isLoading) {
     return (
-      <ContentSection>
+      <ContentSection maxWidth="2xl">
         <Stack align="center" justify="center" spacing={2} direction="row">
           <Loader className="animate-spin" />
 
@@ -42,7 +42,7 @@ export function QueryWrapper<T>({
     const err = (error as Error) ?? new Error("Unknown error");
 
     return (
-      <ContentSection>
+      <ContentSection maxWidth="2xl">
         <Stack align="center" justify="center">
           <Typography className="text-destructive">{err.message}</Typography>
         </Stack>
