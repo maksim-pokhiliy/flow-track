@@ -5,8 +5,10 @@ import { useEffect } from "react";
 import { useWorkspaces } from "@app/modules/workspaces/api";
 import { useWorkspaceStore } from "@app/shared/store";
 
+import { QueryWrapper } from "../layout";
+
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
-  const { data: workspaces } = useWorkspaces();
+  const { data: workspaces, error, isLoading: isWorkspacesLoading } = useWorkspaces();
   const { currentWorkspaceId, setCurrentWorkspace } = useWorkspaceStore();
 
   useEffect(() => {
@@ -20,5 +22,14 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     }
   }, [workspaces, currentWorkspaceId, setCurrentWorkspace]);
 
-  return <>{children}</>;
+  return (
+    <QueryWrapper
+      isLoading={isWorkspacesLoading}
+      data
+      error={error}
+      loadingText="Loading workspaces..."
+    >
+      {() => children}
+    </QueryWrapper>
+  );
 }
