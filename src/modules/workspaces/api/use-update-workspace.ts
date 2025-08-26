@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 type WorkspaceDTO = {
   id: string;
@@ -18,7 +19,7 @@ type UpdateInput = {
 
 export function useUpdateWorkspace() {
   return useMutation({
-    mutationKey: ["workspace:update"],
+    mutationKey: [MutationKeys.WORKSPACE_UPDATE],
     mutationFn: async ({ id, name }: UpdateInput) => {
       const res = await apiClient<WorkspaceDTO>(`/api/workspaces/${encodeURIComponent(id)}`, {
         method: "PATCH",

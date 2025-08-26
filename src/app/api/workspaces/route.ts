@@ -4,6 +4,7 @@ import { requireUserId } from "@app/modules/auth/server";
 import { createWorkspaceSchema } from "@app/modules/workspaces/model";
 import { createWorkspace, listWorkspaces } from "@app/modules/workspaces/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 export async function GET() {
   try {
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
     const { name } = createWorkspaceSchema.parse(body);
     const ws = await createWorkspace(userId, name);
 
-    return NextResponse.json({ data: ws, invalidate: ["workspaces"] }, { status: 201 });
+    return NextResponse.json({ data: ws, invalidate: [QueryKeys.WORKSPACES] }, { status: 201 });
   } catch (e: unknown) {
     return toApiResponse(e);
   }

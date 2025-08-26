@@ -33,7 +33,7 @@ export function ProjectPage() {
       data={project}
       isEmpty={() => Boolean(project && project.workspaceId !== workspaceId)}
       renderEmpty={() => (
-        <ContentSection>
+        <ContentSection maxWidth="2xl">
           <EmptyState
             title="Project not found"
             description="This project doesn't belong to the current workspace"
@@ -47,7 +47,11 @@ export function ProjectPage() {
       )}
     >
       {(proj) => (
-        <ContentSection title={proj.name} subtitle={<ProjectHeader project={proj} />}>
+        <ContentSection
+          maxWidth="2xl"
+          title={proj.name}
+          subtitle={<ProjectHeader project={proj} />}
+        >
           <ProjectTabs project={proj} workspaceId={workspaceId} userRole={userRole} />
         </ContentSection>
       )}

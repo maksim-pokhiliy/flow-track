@@ -70,3 +70,11 @@ export function unwrap<T>(res: ApiResponse<T>): T {
 
   return res.data;
 }
+
+export function unwrapNullable<T>(res: ApiResponse<T | null>): T | null {
+  if (res.error) {
+    throw new AppError(res.error.code, res.error.message, res.error.details);
+  }
+
+  return res.data ?? null;
+}

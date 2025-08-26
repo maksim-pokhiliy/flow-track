@@ -4,6 +4,7 @@ import { requireUserId } from "@app/modules/auth/server";
 import { updateWorkspaceSchema } from "@app/modules/workspaces/model";
 import { deleteWorkspace, updateWorkspace } from "@app/modules/workspaces/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ workspaceId: string }> }) {
   try {
@@ -15,7 +16,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ workspaceId: 
 
     const ws = await updateWorkspace(userId, workspaceId, name);
 
-    return NextResponse.json({ data: ws, invalidate: ["workspaces"] as const });
+    return NextResponse.json({ data: ws, invalidate: [QueryKeys.WORKSPACES] });
   } catch (e: unknown) {
     return toApiResponse(e);
   }
@@ -29,7 +30,7 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ workspaceId
 
     const ws = await deleteWorkspace(userId, workspaceId);
 
-    return NextResponse.json({ data: { id: ws.id }, invalidate: ["workspaces"] as const });
+    return NextResponse.json({ data: { id: ws.id }, invalidate: [QueryKeys.WORKSPACES] });
   } catch (e: unknown) {
     return toApiResponse(e);
   }

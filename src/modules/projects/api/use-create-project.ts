@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 import type { CreateProjectInput, ProjectDTO } from "../model";
 
@@ -14,7 +15,7 @@ type CreateProjectParams = {
 
 export function useCreateProject() {
   return useMutation({
-    mutationKey: ["project:create"],
+    mutationKey: [MutationKeys.PROJECT_CREATE],
     mutationFn: async ({ workspaceId, input }: CreateProjectParams) => {
       const res = await apiClient<ProjectDTO>(
         `/api/workspaces/${encodeURIComponent(workspaceId)}/projects`,

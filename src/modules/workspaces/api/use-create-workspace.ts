@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 type WorkspaceDTO = {
   id: string;
@@ -13,7 +14,7 @@ type WorkspaceDTO = {
 
 export function useCreateWorkspace() {
   return useMutation({
-    mutationKey: ["workspace:create"],
+    mutationKey: [MutationKeys.WORKSPACE_CREATE],
     mutationFn: async (input: { name: string }) => {
       const res = await apiClient<WorkspaceDTO>("/api/workspaces", {
         method: "POST",
