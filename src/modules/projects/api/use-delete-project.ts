@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 type DeleteProjectParams = {
   workspaceId: string;
@@ -14,7 +15,7 @@ type DeleteResponse = { id: string };
 
 export function useDeleteProject() {
   return useMutation({
-    mutationKey: ["project:delete"],
+    mutationKey: [MutationKeys.PROJECT_DELETE],
     mutationFn: async ({ workspaceId, projectId }: DeleteProjectParams) => {
       const res = await apiClient<DeleteResponse>(
         `/api/workspaces/${encodeURIComponent(workspaceId)}/projects/${encodeURIComponent(

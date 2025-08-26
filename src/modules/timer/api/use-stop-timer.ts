@@ -4,28 +4,23 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
-import type { StopTimerInput, TimeEntryDTO } from "../model";
-
-type StopTimerParams = {
-  workspaceId: string;
-  input?: StopTimerInput;
-};
+import type { TimeEntryDTO } from "../model";
 
 export function useStopTimer() {
   return useMutation({
-    mutationKey: ["timer:stop"],
-    mutationFn: async ({ workspaceId, input }: StopTimerParams) => {
+    mutationKey: [MutationKeys.TIMER_STOP],
+    mutationFn: async () => {
       const res = await apiClient<TimeEntryDTO | null>("/api/timer/stop", {
         method: "POST",
-        body: JSON.stringify({ ...input, workspaceId }),
       });
 
       return unwrap(res);
     },
     onSuccess: (data) => {
       if (data) {
-        const seconds = data.durationSec ?? 0;
+        const seconds = data.duration ?? 0;
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
 

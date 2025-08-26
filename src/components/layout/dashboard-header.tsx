@@ -12,7 +12,6 @@ import { useWorkspaceStore } from "@app/shared/store";
 const navItems = [
   { href: "/projects", label: "Projects" },
   { href: "/timer", label: "Timer" },
-  { href: "/analytics", label: "Analytics" },
 ];
 
 export function DashboardHeader() {
@@ -22,7 +21,7 @@ export function DashboardHeader() {
 
   return (
     <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <Container>
+      <Container maxWidth="2xl">
         <Stack className="h-14" direction="row" align="center" justify="between">
           <Stack spacing={4} direction="row" align="center">
             <Logo href="/workspaces" />
@@ -44,7 +43,7 @@ export function DashboardHeader() {
           </Stack>
 
           <Stack spacing={4} direction="row" align="center">
-            {currentWorkspaceId && <TimerWidget />}
+            <TimerWidget />
 
             {workspaces.length > 0 && (
               <WorkspaceSelector

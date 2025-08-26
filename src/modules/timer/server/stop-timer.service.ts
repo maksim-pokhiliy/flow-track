@@ -1,60 +1,37 @@
-import { prisma } from "@app/shared/lib/server";
+import { AppError, ERROR_CODES } from "@app/shared/api";
+import { prisma } from "@app/shared/lib/prisma";
 
-import type { StopTimerInput, TimeEntryDTO } from "../model";
+import type { TimeEntryDTO } from "../model";
 
-export async function stopTimer(
-  userId: string,
-  workspaceId: string,
-  input?: StopTimerInput,
-): Promise<TimeEntryDTO | null> {
-  const activeTimer = await prisma.timeEntry.findFirst({
-    where: {
-      userId,
-      workspaceId,
-      endTime: null,
-    },
+export async function stopTimer(userId: string): Promise<TimeEntryDTO> {
+  const timeEntry = await prisma.timeEntry.findFirst({
+    where: { userId, endTime: null },
     include: {
-      project: {
-        select: { id: true, name: true },
-      },
-      task: {
-        select: { id: true, name: true },
-      },
+      workspace: { select: { id: true, name: true } },
+      project: { select: { id: true, name: true } },
+      task: { select: { id: true, name: true } },
     },
   });
 
-  if (!activeTimer) {
-    return null;
+  if (!timeEntry) {
+    throw new AppError(ERROR_CODES.NOT_FOUND, "No active timer found");
   }
 
   const now = new Date();
-  const durationMs = now.getTime() - activeTimer.startTime.getTime();
-  const durationSec = Math.floor(durationMs / 1000);
+  const duration = Math.floor((now.getTime() - timeEntry.startedAt.getTime()) / 1000);
 
-  const stoppedTimer = await prisma.timeEntry.update({
-    where: { id: activeTimer.id },
+  const updated = await prisma.timeEntry.update({
+    where: { id: timeEntry.id },
     data: {
       endTime: now,
-      durationSec,
-      note: input?.note ?? activeTimer.note,
+      duration,
     },
     include: {
-      project: {
-        select: { id: true, name: true },
-      },
-      task: {
-        select: { id: true, name: true },
-      },
+      workspace: { select: { id: true, name: true } },
+      project: { select: { id: true, name: true } },
+      task: { select: { id: true, name: true } },
     },
   });
 
-  const endTime = stoppedTimer.endTime ?? now;
-  const finalDurationSec = stoppedTimer.durationSec ?? durationSec;
-
-  return {
-    ...stoppedTimer,
-    startTime: stoppedTimer.startTime.toISOString(),
-    endTime: endTime.toISOString(),
-    durationSec: finalDurationSec,
-  };
+  return updated;
 }

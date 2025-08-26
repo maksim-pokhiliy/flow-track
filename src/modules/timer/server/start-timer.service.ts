@@ -1,91 +1,36 @@
-import { AppError, ERROR_CODES } from "@app/shared/api";
-import { prisma } from "@app/shared/lib/server";
+import { Prisma } from "@prisma/client";
 
-import type { StartTimerInput, TimeEntryDTO } from "../model";
+import { assertProjectAccess } from "@app/modules/projects/server/assert-project-access.service";
+import { assertTaskAccess } from "@app/modules/tasks/server/assert-task-access.service";
+import { prisma } from "@app/shared/lib/prisma";
 
-export async function startTimer(
-  userId: string,
-  workspaceId: string,
-  input: StartTimerInput,
-): Promise<TimeEntryDTO> {
-  const project = await prisma.project.findFirst({
-    where: {
-      id: input.projectId,
-      workspaceId,
-      workspace: {
-        memberships: {
-          some: { userId },
-        },
-      },
-    },
-  });
+import { StartTimerInput, TimeEntryDTO } from "../model";
 
-  if (!project) {
-    throw new AppError(ERROR_CODES.NOT_FOUND, "Project not found or access denied");
+export async function startTimer(userId: string, input: StartTimerInput): Promise<TimeEntryDTO> {
+  if (input.projectId) {
+    await assertProjectAccess(userId, input.projectId);
   }
 
-  const activeTimer = await prisma.timeEntry.findFirst({
-    where: {
-      userId,
-      workspaceId,
-      endTime: null,
-    },
-  });
-
-  if (
-    activeTimer &&
-    activeTimer.projectId === input.projectId &&
-    activeTimer.taskId === input.taskId
-  ) {
-    return {
-      ...activeTimer,
-      endTime: null,
-      durationSec: null,
-      startTime: activeTimer.startTime.toISOString(),
-    };
+  if (input.taskId) {
+    await assertTaskAccess(userId, input.taskId);
   }
 
-  const newTimer = await prisma.$transaction(async (tx) => {
-    if (activeTimer) {
-      const now = new Date();
-      const durationMs = now.getTime() - activeTimer.startTime.getTime();
-      const durationSec = Math.floor(durationMs / 1000);
-
-      await tx.timeEntry.update({
-        where: { id: activeTimer.id },
-        data: {
-          endTime: now,
-          durationSec,
-        },
-      });
-    }
-
-    const newEntry = await tx.timeEntry.create({
-      data: {
-        userId,
-        workspaceId,
-        projectId: input.projectId,
-        taskId: input.taskId,
-        note: input.note,
-        startTime: new Date(),
-      },
-      include: {
-        project: {
-          select: { id: true, name: true },
-        },
-        task: {
-          select: { id: true, name: true },
-        },
-      },
-    });
-
-    return newEntry;
-  });
-
-  return {
-    ...newTimer,
-    endTime: null,
-    durationSec: null,
-    startTime: newTimer.startTime.toISOString(),
+  const data: Prisma.TimeEntryCreateInput = {
+    user: { connect: { id: userId } },
+    workspace: input.workspaceId ? { connect: { id: input.workspaceId } } : undefined,
+    project: input.projectId ? { connect: { id: input.projectId } } : undefined,
+    task: input.taskId ? { connect: { id: input.taskId } } : undefined,
+    startedAt: new Date(),
   };
+
+  const timeEntry = await prisma.timeEntry.create({
+    data,
+    include: {
+      workspace: { select: { id: true, name: true } },
+      project: { select: { id: true, name: true } },
+      task: { select: { id: true, name: true } },
+    },
+  });
+
+  return timeEntry;
 }

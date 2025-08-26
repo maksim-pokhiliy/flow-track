@@ -8,7 +8,7 @@ import { Navigation } from "@app/components/layout/public-header/navigation";
 export function PublicHeader() {
   return (
     <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <Container>
+      <Container maxWidth="2xl">
         <Stack className="h-14" align="center" justify="between" direction="row">
           <Stack spacing={12} align="center" direction="row">
             <Logo />

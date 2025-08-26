@@ -1,23 +1,35 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { requireUserId } from "@app/modules/auth/server";
-import { getActiveTimer } from "@app/modules/timer/server";
-import { AppError, ERROR_CODES, toApiResponse } from "@app/shared/api";
+import { updateTimerInputSchema } from "@app/modules/timer/model";
+import { getActiveTimer } from "@app/modules/timer/server/get-active-timer.service";
+import { updateCurrentTimer } from "@app/modules/timer/server/update-current-timer.service";
+import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const userId = await requireUserId();
-    const { searchParams } = new URL(req.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const timeEntry = await getActiveTimer(userId);
 
-    if (!workspaceId) {
-      throw new AppError(ERROR_CODES.INVALID_INPUT, "Workspace ID is required");
-    }
+    return NextResponse.json({ data: timeEntry ?? null });
+  } catch (e) {
+    return toApiResponse(e);
+  }
+}
 
-    const timer = await getActiveTimer(userId, workspaceId);
+export async function PATCH(req: NextRequest) {
+  try {
+    const userId = await requireUserId();
+    const body = await req.json();
+    const input = updateTimerInputSchema.parse(body);
+    const timeEntry = await updateCurrentTimer(userId, input);
 
-    return NextResponse.json({ data: timer });
-  } catch (e: unknown) {
+    return NextResponse.json({
+      data: timeEntry,
+      invalidate: [QueryKeys.TIMER_ACTIVE, QueryKeys.TIME_ENTRIES],
+    });
+  } catch (e) {
     return toApiResponse(e);
   }
 }

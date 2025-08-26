@@ -7,7 +7,7 @@ interface ContentSectionProps {
   title?: string;
   subtitle?: string | ReactNode;
   backgroundColor?: "light" | "dark";
-  maxWidth?: "sm" | "md" | "lg" | "xl";
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full" | false;
   children?: ReactNode;
 }
 

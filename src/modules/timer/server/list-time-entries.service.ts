@@ -1,4 +1,4 @@
-import { prisma } from "@app/shared/lib/server";
+import { prisma } from "@app/shared/lib/prisma";
 
 import type { TimeEntryDTO } from "../model";
 
@@ -22,27 +22,19 @@ export async function listTimeEntries(
       ...(options?.projectId && { projectId: options.projectId }),
       ...(options?.taskId && { taskId: options.taskId }),
       ...(options?.startDate && {
-        startTime: { gte: options.startDate },
+        startedAt: { gte: options.startDate },
       }),
       ...(options?.endDate && {
-        startTime: { lte: options.endDate },
+        startedAt: { lte: options.endDate },
       }),
     },
     include: {
-      project: {
-        select: { id: true, name: true },
-      },
-      task: {
-        select: { id: true, name: true },
-      },
+      project: { select: { id: true, name: true } },
+      task: { select: { id: true, name: true } },
     },
-    orderBy: { startTime: "desc" },
+    orderBy: { startedAt: "desc" },
     take: options?.limit ?? 100,
   });
 
-  return entries.map((entry) => ({
-    ...entry,
-    startTime: entry.startTime.toISOString(),
-    endTime: entry.endTime?.toISOString() ?? null,
-  }));
+  return entries;
 }

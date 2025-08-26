@@ -2,6 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { QueryKeys } from "@app/shared/query-keys";
+
 type SessionUser = {
   id: string;
   name?: string | null;
@@ -16,7 +18,7 @@ type SessionResponse = {
 
 export function useCurrentUser() {
   return useQuery({
-    queryKey: ["auth:session"],
+    queryKey: [QueryKeys.AUTH_SESSION],
     queryFn: async () => {
       const res = await fetch("/api/auth/session", { credentials: "same-origin" });
 

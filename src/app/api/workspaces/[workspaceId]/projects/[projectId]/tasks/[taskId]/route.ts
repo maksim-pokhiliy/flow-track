@@ -4,6 +4,7 @@ import { requireUserId } from "@app/modules/auth/server";
 import { updateTaskSchema } from "@app/modules/tasks/model";
 import { deleteTask, updateTask } from "@app/modules/tasks/server";
 import { toApiResponse } from "@app/shared/api";
+import { QueryKeys } from "@app/shared/query-keys";
 
 type Context = {
   params: Promise<{
@@ -23,7 +24,10 @@ export async function PATCH(req: Request, ctx: Context) {
 
     const task = await updateTask(userId, taskId, input);
 
-    return NextResponse.json({ data: task, invalidate: ["tasks", "task", "project"] });
+    return NextResponse.json({
+      data: task,
+      invalidate: [QueryKeys.TASKS, QueryKeys.TASK, QueryKeys.PROJECT],
+    });
   } catch (e: unknown) {
     return toApiResponse(e);
   }
@@ -36,7 +40,7 @@ export async function DELETE(_req: Request, ctx: Context) {
 
     const result = await deleteTask(userId, taskId);
 
-    return NextResponse.json({ data: result, invalidate: ["tasks", "project"] });
+    return NextResponse.json({ data: result, invalidate: [QueryKeys.TASKS, QueryKeys.PROJECT] });
   } catch (e: unknown) {
     return toApiResponse(e);
   }

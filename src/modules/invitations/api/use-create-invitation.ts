@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { apiClient, unwrap } from "@app/shared/api";
+import { MutationKeys } from "@app/shared/query-keys";
 
 type CreateInvitationInput = {
   email: string;
@@ -22,7 +23,7 @@ type InvitationDTO = {
 
 export function useCreateInvitation(workspaceId: string) {
   return useMutation({
-    mutationKey: ["invitation:create", workspaceId],
+    mutationKey: [MutationKeys.INVITATION_CREATE, workspaceId],
     mutationFn: async (input: CreateInvitationInput) => {
       const res = await apiClient<InvitationDTO>(
         `/api/workspaces/${encodeURIComponent(workspaceId)}/invitations`,
