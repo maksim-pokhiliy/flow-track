@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 
+import { TimerProvider } from "./timer-provider";
 import { WorkspaceProvider } from "./workspace-provider";
 
 type PrivateRootProviderProps = {
@@ -9,5 +10,9 @@ type PrivateRootProviderProps = {
 };
 
 export function PrivateRootProvider({ children }: PrivateRootProviderProps) {
-  return <WorkspaceProvider>{children}</WorkspaceProvider>;
+  return (
+    <WorkspaceProvider>
+      <TimerProvider>{children}</TimerProvider>
+    </WorkspaceProvider>
+  );
 }
