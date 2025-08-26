@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";
 
-import { setQueryClientForInvalidation } from "@app/shared/api/interceptors/cache-invalidation";
+import { setQueryClientForInvalidation } from "@app/shared/api";
 
 type RootProviderProps = {
   children: ReactNode;

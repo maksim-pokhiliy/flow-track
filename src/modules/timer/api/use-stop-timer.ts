@@ -1,14 +1,16 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { apiClient, unwrap } from "@app/shared/api";
-import { MutationKeys } from "@app/shared/query-keys";
+import { apiClient, unwrapNullable } from "@app/shared/api";
+import { MutationKeys, qk } from "@app/shared/query-keys";
 
 import type { TimeEntryDTO } from "../model";
 
 export function useStopTimer() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: [MutationKeys.TIMER_STOP],
     mutationFn: async () => {
@@ -16,7 +18,16 @@ export function useStopTimer() {
         method: "POST",
       });
 
-      return unwrap(res);
+      return unwrapNullable(res);
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: qk.activeTimer() });
+
+      const previousTimer = queryClient.getQueryData(qk.activeTimer());
+
+      queryClient.setQueryData(qk.activeTimer(), null);
+
+      return { previousTimer };
     },
     onSuccess: (data) => {
       if (data) {
@@ -37,7 +48,11 @@ export function useStopTimer() {
         toast.success(`Timer stopped: ${duration}`);
       }
     },
-    onError: (err: Error) => {
+    onError: (err, _, context) => {
+      if (context?.previousTimer !== undefined) {
+        queryClient.setQueryData(qk.activeTimer(), context.previousTimer);
+      }
+
       toast.error(err.message);
     },
   });

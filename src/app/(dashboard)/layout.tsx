@@ -4,11 +4,11 @@ import { PrivateRootProvider } from "@app/components/providers/private-root-prov
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <Stack className="min-h-full">
-      <DashboardHeader />
+      <PrivateRootProvider>
+        <DashboardHeader />
 
-      <main className="flex flex-1 h-full">
-        <PrivateRootProvider>{children}</PrivateRootProvider>
-      </main>
+        <main className="flex flex-1 h-full">{children}</main>
+      </PrivateRootProvider>
     </Stack>
   );
 }
