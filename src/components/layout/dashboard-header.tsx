@@ -10,6 +10,7 @@ import { useWorkspaces } from "@app/modules/workspaces/api";
 import { useWorkspaceStore } from "@app/shared/store";
 
 const navItems = [
+  { href: "/workspaces", label: "Workspaces" },
   { href: "/projects", label: "Projects" },
   { href: "/timer", label: "Timer" },
 ];
