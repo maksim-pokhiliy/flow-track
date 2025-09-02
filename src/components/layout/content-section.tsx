@@ -2,12 +2,13 @@ import { ReactNode } from "react";
 
 import { Container, Stack } from "@app/components/layout";
 import { Typography } from "@app/components/ui";
+import { cn } from "@app/shared/lib";
 
 interface ContentSectionProps {
   title?: string;
   subtitle?: string | ReactNode;
-  backgroundColor?: "light" | "dark";
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full" | false;
+  className?: string;
   children?: ReactNode;
 }
 
@@ -15,10 +16,11 @@ export const ContentSection = ({
   title,
   subtitle,
   maxWidth = "xl",
+  className,
   children,
 }: ContentSectionProps) => {
   return (
-    <Container maxWidth={maxWidth} className="pt-8">
+    <Container maxWidth={maxWidth} className={cn("py-8", className)}>
       <Stack spacing={children ? 12 : 0}>
         {(title ?? subtitle) && (
           <Stack spacing={2}>
