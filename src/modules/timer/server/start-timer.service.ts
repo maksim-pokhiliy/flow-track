@@ -4,22 +4,28 @@ import { assertProjectAccess } from "@app/modules/projects/server/assert-project
 import { assertTaskAccess } from "@app/modules/tasks/server/assert-task-access.service";
 import { prisma } from "@app/shared/lib/prisma";
 
-import { StartTimerInput, TimeEntryDTO } from "../model";
+import { TimeEntryDTO } from "../model";
 
-export async function startTimer(userId: string, input: StartTimerInput): Promise<TimeEntryDTO> {
-  if (input.projectId) {
-    await assertProjectAccess(userId, input.projectId);
+type StartTimerParams = {
+  workspaceId?: string;
+  project?: TimeEntryDTO["project"];
+  task?: TimeEntryDTO["task"];
+};
+
+export async function startTimer(userId: string, input: StartTimerParams): Promise<TimeEntryDTO> {
+  if (input?.project?.id) {
+    await assertProjectAccess(userId, input.project.id);
   }
 
-  if (input.taskId) {
-    await assertTaskAccess(userId, input.taskId);
+  if (input?.task?.id) {
+    await assertTaskAccess(userId, input.task.id);
   }
 
   const data: Prisma.TimeEntryCreateInput = {
     user: { connect: { id: userId } },
     workspace: input.workspaceId ? { connect: { id: input.workspaceId } } : undefined,
-    project: input.projectId ? { connect: { id: input.projectId } } : undefined,
-    task: input.taskId ? { connect: { id: input.taskId } } : undefined,
+    project: input?.project?.id ? { connect: { id: input.project.id } } : undefined,
+    task: input?.task?.id ? { connect: { id: input.task.id } } : undefined,
     startedAt: new Date(),
   };
 

@@ -14,12 +14,6 @@ export const timeEntrySchema = z.object({
   updatedAt: z.date(),
 });
 
-export const startTimerSchema = z.object({
-  workspaceId: z.string().optional(),
-  projectId: z.string().optional(),
-  taskId: z.string().optional(),
-});
-
 export const updateTimerInputSchema = z.object({
   workspaceId: z.string().nullable().optional(),
   projectId: z.string().nullable().optional(),
@@ -32,5 +26,4 @@ export type TimeEntryDTO = z.infer<typeof timeEntrySchema> & {
   task?: Pick<Task, "id" | "name"> | null;
 };
 
-export type StartTimerInput = z.infer<typeof startTimerSchema>;
 export type UpdateTimerInput = z.infer<typeof updateTimerInputSchema>;

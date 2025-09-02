@@ -19,8 +19,18 @@ export function ProjectPage() {
   const projectId = params["projectId"] as string;
 
   const { currentWorkspaceId: workspaceId } = useWorkspaceStore();
-  const { data: project, isLoading: isProjectLoading, error } = useProject(workspaceId, projectId);
-  const { data: workspaces, isLoading: isWorkspacesLoading } = useWorkspaces();
+
+  const {
+    data: project,
+    isLoading: isProjectLoading,
+    error: projectError,
+  } = useProject(workspaceId, projectId);
+
+  const {
+    data: workspaces,
+    isLoading: isWorkspacesLoading,
+    error: workspacesError,
+  } = useWorkspaces();
 
   const workspace = workspaces?.find((ws) => ws.id === workspaceId);
   const userRole = workspace?.role ?? Role.MEMBER;
@@ -29,7 +39,7 @@ export function ProjectPage() {
     <QueryWrapper
       isLoading={isProjectLoading || isWorkspacesLoading}
       loadingText="Loading project..."
-      error={error}
+      error={projectError ?? workspacesError}
       data={project}
       isEmpty={() => Boolean(project && project.workspaceId !== workspaceId)}
       renderEmpty={() => (

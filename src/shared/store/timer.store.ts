@@ -1,9 +1,11 @@
 import { create } from "zustand";
 
+import { TimeEntryDTO } from "@app/modules/timer/model";
+
 interface TimerContext {
-  workspaceId: string | null;
-  projectId: string | null;
-  taskId: string | null;
+  workspace: TimeEntryDTO["workspace"];
+  project: TimeEntryDTO["project"];
+  task: TimeEntryDTO["task"];
 }
 
 interface TimerStore {
@@ -11,18 +13,9 @@ interface TimerStore {
   elapsed: number;
   context: TimerContext;
 
-  setStartedAt: (date: Date | null) => void;
-
   setContext: (context: Partial<TimerContext>) => void;
-
+  syncWithActiveTimer: (timer: TimeEntryDTO) => void;
   clear: () => void;
-
-  syncWithActiveTimer: (timer: {
-    startedAt: Date | string;
-    workspaceId?: string | null;
-    projectId?: string | null;
-    taskId?: string | null;
-  }) => void;
 }
 
 export const useTimerStore = create<TimerStore>((set, get) => {
@@ -58,20 +51,9 @@ export const useTimerStore = create<TimerStore>((set, get) => {
     startedAt: null,
     elapsed: 0,
     context: {
-      workspaceId: null,
-      projectId: null,
-      taskId: null,
-    },
-
-    setStartedAt: (date) => {
-      stopInterval();
-
-      if (date) {
-        startInterval();
-        set({ startedAt: date, elapsed: 0 });
-      } else {
-        set({ startedAt: null, elapsed: 0 });
-      }
+      workspace: null,
+      project: null,
+      task: null,
     },
 
     setContext: (newContext) => {
@@ -96,9 +78,9 @@ export const useTimerStore = create<TimerStore>((set, get) => {
         startedAt,
         elapsed,
         context: {
-          workspaceId: timer.workspaceId ?? null,
-          projectId: timer.projectId ?? null,
-          taskId: timer.taskId ?? null,
+          workspace: timer.workspace ?? null,
+          project: timer.project ?? null,
+          task: timer.task ?? null,
         },
       });
     },
@@ -110,9 +92,9 @@ export const useTimerStore = create<TimerStore>((set, get) => {
         startedAt: null,
         elapsed: 0,
         context: {
-          workspaceId: null,
-          projectId: null,
-          taskId: null,
+          workspace: null,
+          project: null,
+          task: null,
         },
       });
     },

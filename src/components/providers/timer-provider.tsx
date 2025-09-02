@@ -8,9 +8,10 @@ import { useTimerStore, useWorkspaceStore } from "@app/shared/store";
 import { QueryWrapper } from "../layout";
 
 export function TimerProvider({ children }: { children: React.ReactNode }) {
-  const { data: activeTimer, error, isLoading } = useActiveTimer();
   const { currentWorkspaceId } = useWorkspaceStore();
   const { syncWithActiveTimer, clear } = useTimerStore();
+
+  const { data: activeTimer, error, isLoading } = useActiveTimer();
 
   useEffect(() => {
     if (!isLoading) {

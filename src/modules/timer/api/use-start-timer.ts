@@ -6,11 +6,12 @@ import { toast } from "sonner";
 import { apiClient, unwrap } from "@app/shared/api";
 import { MutationKeys, qk } from "@app/shared/query-keys";
 
-import type { StartTimerInput, TimeEntryDTO } from "../model";
+import type { TimeEntryDTO } from "../model";
 
 type StartTimerParams = {
-  workspaceId?: string | null;
-  input: StartTimerInput;
+  workspaceId?: string;
+  project?: TimeEntryDTO["project"];
+  task?: TimeEntryDTO["task"];
 };
 
 export function useStartTimer() {
@@ -18,22 +19,24 @@ export function useStartTimer() {
 
   return useMutation({
     mutationKey: [MutationKeys.TIMER_START],
-    mutationFn: async ({ workspaceId, input }: StartTimerParams) => {
+    mutationFn: async (timer: StartTimerParams) => {
       const res = await apiClient<TimeEntryDTO>("/api/timer/start", {
         method: "POST",
-        body: JSON.stringify({ ...input, workspaceId }),
+        body: JSON.stringify({ ...timer }),
       });
 
       return unwrap(res);
     },
-    onMutate: async ({ workspaceId, input }) => {
+    onMutate: async (timer) => {
       await queryClient.cancelQueries({ queryKey: qk.activeTimer() });
 
       const optimisticTimer: TimeEntryDTO = {
         id: `temp-${Date.now()}`,
-        workspaceId: workspaceId ?? null,
-        projectId: input.projectId ?? null,
-        taskId: input.taskId ?? null,
+        project: timer.project,
+        task: timer.task,
+        workspaceId: timer?.workspaceId ?? null,
+        projectId: timer?.project?.id ?? null,
+        taskId: timer?.task?.id ?? null,
         userId: "temp",
         startedAt: new Date(),
         endTime: null,
