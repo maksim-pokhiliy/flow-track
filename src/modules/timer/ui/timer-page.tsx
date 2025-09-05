@@ -7,10 +7,7 @@ import { useWorkspaceStore } from "@app/shared/store";
 
 import { useTimeEntries } from "../api";
 
-import { DaySummary } from "./components/day-summary";
-// import { TimeEntriesList } from "./components/time-entries-list";
-import { TimeFilters } from "./components/time-filters";
-import { TimeEntriesList } from "./components";
+import { DaySummary, TimeEntriesList, TimeFilters } from "./components";
 
 export function TimerPage() {
   const { currentWorkspaceId } = useWorkspaceStore();
