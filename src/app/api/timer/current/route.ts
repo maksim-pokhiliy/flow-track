@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { requireUserId } from "@app/modules/auth/server";
 import { updateTimerInputSchema } from "@app/modules/timer/model";
-import { getActiveTimer } from "@app/modules/timer/server/get-active-timer.service";
-import { updateCurrentTimer } from "@app/modules/timer/server/update-current-timer.service";
+import { getActiveTimer, updateCurrentTimer } from "@app/modules/timer/server";
 import { toApiResponse } from "@app/shared/api";
 import { QueryKeys } from "@app/shared/query-keys";
 

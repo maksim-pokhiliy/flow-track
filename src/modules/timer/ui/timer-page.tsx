@@ -1,15 +1,50 @@
 "use client";
 
+import { useState } from "react";
+
 import { ContentSection } from "@app/components/layout";
+import { useWorkspaceStore } from "@app/shared/store";
+
+import { useTimeEntries } from "../api";
+
+import { DaySummary } from "./components/day-summary";
+// import { TimeEntriesList } from "./components/time-entries-list";
+import { TimeFilters } from "./components/time-filters";
+import { TimeEntriesList } from "./components";
 
 export function TimerPage() {
+  const { currentWorkspaceId } = useWorkspaceStore();
+  const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
+    from: new Date(new Date().setDate(new Date().getDate() - 7)),
+    to: new Date(),
+  });
+  const [projectFilter, setProjectFilter] = useState<string | null>(null);
+
+  const { data: entries = [], isLoading } = useTimeEntries({
+    workspaceId: currentWorkspaceId,
+    projectId: projectFilter ?? undefined,
+  });
+
+  const filteredEntries = entries.filter((entry) => {
+    const entryDate = new Date(entry.startedAt);
+
+    return entryDate >= dateRange.from && entryDate <= dateRange.to;
+  });
+
   return (
     <ContentSection
       maxWidth="2xl"
-      title="Timer"
-      subtitle="Track your time across projects and tasks"
+      title="Time Tracking"
+      subtitle={<DaySummary entries={filteredEntries} />}
     >
-      <div>Timer controls coming soon...</div>
+      <TimeFilters
+        dateRange={dateRange}
+        onDateRangeChange={setDateRange}
+        projectFilter={projectFilter}
+        onProjectFilterChange={setProjectFilter}
+      />
+
+      <TimeEntriesList entries={filteredEntries} isLoading={isLoading} />
     </ContentSection>
   );
 }

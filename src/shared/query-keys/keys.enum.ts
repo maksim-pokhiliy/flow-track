@@ -36,6 +36,7 @@ export enum MutationKeys {
   TIMER_START = "timer:start",
   TIMER_STOP = "timer:stop",
   TIMER_UPDATE = "timer:update",
+  TIMER_DELETE = "timer:delete",
 
   // Invitation mutations
   INVITATION_CREATE = "invitation:create",
