@@ -1,6 +1,6 @@
 "use client";
 
-import { EmptyState, QueryWrapper, Stack } from "@app/components/layout";
+import { EmptyState, QueryWrapper } from "@app/components/layout";
 
 import type { TimeEntryDTO } from "../../model";
 
@@ -40,17 +40,15 @@ export function TimeEntriesList({ entries, isLoading }: TimeEntriesListProps) {
         />
       }
     >
-      {(days) => (
-        <Stack spacing={4}>
-          {days.map((dateString) => (
-            <DayGroup
-              key={dateString}
-              date={new Date(dateString)}
-              entries={entriesByDay[dateString] ?? []}
-            />
-          ))}
-        </Stack>
-      )}
+      {(days) =>
+        days.map((dateString) => (
+          <DayGroup
+            key={dateString}
+            date={new Date(dateString)}
+            entries={entriesByDay[dateString] ?? []}
+          />
+        ))
+      }
     </QueryWrapper>
   );
 }

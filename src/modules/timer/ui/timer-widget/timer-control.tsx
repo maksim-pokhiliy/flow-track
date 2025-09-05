@@ -1,6 +1,6 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
+import { Play, Square } from "lucide-react";
 
 import { Button } from "@app/components/ui";
 import { useTimerStore, useWorkspaceStore } from "@app/shared/store";
@@ -36,7 +36,7 @@ export function TimerControl() {
       loadingText=""
       aria-label={isRunning ? "Stop timer" : "Start timer"}
     >
-      {isRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+      {isRunning ? <Square className="h-4 w-4" /> : <Play className="h-4 w-4" />}
     </Button>
   );
 }

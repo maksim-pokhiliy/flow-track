@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { MoreVertical, Play, Trash2 } from "lucide-react";
+import { ChevronRight, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { Stack } from "@app/components/layout";
@@ -15,8 +15,13 @@ import {
   DropdownMenuTrigger,
   Typography,
 } from "@app/components/ui";
-import { useDeleteTimeEntry, useStartTimer } from "@app/modules/timer/api";
-import { useTimerStore, useWorkspaceStore } from "@app/shared/store";
+import {
+  useActiveTimer,
+  useDeleteTimeEntry,
+  useStartTimer,
+  useStopTimer,
+} from "@app/modules/timer/api";
+import { useWorkspaceStore } from "@app/shared/store";
 
 import type { TimeEntryDTO } from "../../model";
 
@@ -26,10 +31,11 @@ interface TimeEntryCardProps {
 
 export function TimeEntryCard({ entry }: TimeEntryCardProps) {
   const { currentWorkspaceId } = useWorkspaceStore();
+  const { data: activeTimer } = useActiveTimer();
   const { mutate: startTimer } = useStartTimer();
+  const { mutate: stopTimer } = useStopTimer();
   const { mutate: deleteEntry } = useDeleteTimeEntry();
-  const { startedAt } = useTimerStore();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   const isRunning = entry.endTime === null;
 
@@ -52,20 +58,44 @@ export function TimeEntryCard({ entry }: TimeEntryCardProps) {
   };
 
   const handleContinue = () => {
-    startTimer({
-      workspaceId: currentWorkspaceId,
-      project: entry.project,
-      task: entry.task,
-    });
+    setIsSwitching(true);
+
+    if (activeTimer && !isRunning) {
+      stopTimer(undefined, {
+        onSuccess: () => {
+          startTimer(
+            {
+              workspaceId: currentWorkspaceId,
+              project: entry.project,
+              task: entry.task,
+            },
+            {
+              onSettled: () => setIsSwitching(false),
+            },
+          );
+        },
+        onError: () => setIsSwitching(false),
+      });
+    } else if (!activeTimer) {
+      startTimer(
+        {
+          workspaceId: currentWorkspaceId,
+          project: entry.project,
+          task: entry.task,
+        },
+        {
+          onSettled: () => setIsSwitching(false),
+        },
+      );
+    }
   };
 
   const handleDelete = () => {
-    setIsDeleting(true);
     deleteEntry(entry.id);
   };
 
   return (
-    <Card className="py-2" variant={isRunning ? "outline" : "bordered"}>
+    <Card className="py-2 flex-1" variant={isRunning ? "outline" : "bordered"}>
       <CardContent>
         <Stack direction="row" align="center" justify="between" spacing={2}>
           <Stack className="flex-1" align="center" justify="between" direction="row">
@@ -77,9 +107,13 @@ export function TimeEntryCard({ entry }: TimeEntryCardProps) {
               </Typography>
 
               {entry.task && (
-                <Typography variant="body2" className="text-muted-foreground">
-                  › {entry.task.name}
-                </Typography>
+                <>
+                  <ChevronRight className="h-3 w-3" />
+
+                  <Typography variant="body2" className="text-muted-foreground">
+                    {entry.task.name}
+                  </Typography>
+                </>
               )}
             </Stack>
 
@@ -96,12 +130,15 @@ export function TimeEntryCard({ entry }: TimeEntryCardProps) {
           </Stack>
 
           <Stack direction="row" spacing={1} align="center">
-            {!isRunning && !startedAt && (
+            {!isRunning && (
               <Button
                 size="icon"
                 variant="ghost"
                 onClick={handleContinue}
                 aria-label="Continue timer with same context"
+                disabled={isSwitching}
+                loading={isSwitching}
+                loadingText=""
               >
                 <Play className="h-4 w-4" />
               </Button>
@@ -115,7 +152,7 @@ export function TimeEntryCard({ entry }: TimeEntryCardProps) {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDelete} disabled={isDeleting}>
+                <DropdownMenuItem onClick={handleDelete}>
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
                 </DropdownMenuItem>

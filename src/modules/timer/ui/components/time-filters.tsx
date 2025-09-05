@@ -36,7 +36,7 @@ export function TimeFilters({
   const { data: projects = [] } = useProjects(currentWorkspaceId);
 
   return (
-    <Stack direction="row" spacing={3} align="center" className="mb-6">
+    <Stack direction="row" spacing={3} align="center">
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" size="default">
