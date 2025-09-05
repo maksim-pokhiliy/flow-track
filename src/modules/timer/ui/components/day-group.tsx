@@ -123,7 +123,7 @@ export function DayGroup({ date, entries }: DayGroupProps) {
 
   return (
     <Stack spacing={4}>
-      <Stack spacing={2} className="pb-3 border-b-2 border-primary/10">
+      <Stack spacing={2} className="pb-3 border-b border-primary/10">
         <Stack direction="row" align="center" justify="between">
           <Stack direction="row" align="end" spacing={2}>
             <Typography variant="h3" className="font-bold">
